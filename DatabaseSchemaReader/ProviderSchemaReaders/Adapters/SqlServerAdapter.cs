@@ -148,9 +148,15 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
                 .Execute(DbConnection);
         }
 
-        public override IList<DatabaseIndex> Indexes(string tableName)
-        {
+        public override IList<DatabaseIndex> Indexes(string tableName) 
+            {
             return new Indexes(Owner, tableName)
+                .Execute(DbConnection);
+        }
+
+        public override IList<DatabaseStatistics> Statistics(string tableName) 
+            {
+            return new Statistics(Owner, tableName)
                 .Execute(DbConnection);
         }
 

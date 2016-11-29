@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using DatabaseSchemaReader.DataSchema;
 using DatabaseSchemaReader.SqlGen;
 
@@ -130,7 +129,7 @@ namespace DatabaseSchemaReader.Compare
             return _migration.DropProcedure(procedure);
         }
 
-        public string AddIndex(DatabaseTable databaseTable, DatabaseIndex index)
+        public string AddIndex(DatabaseTable databaseTable, DatabaseIndex index) 
         {
             return _migration.AddIndex(databaseTable, index);
         }
@@ -138,6 +137,16 @@ namespace DatabaseSchemaReader.Compare
         public string DropIndex(DatabaseTable databaseTable, DatabaseIndex index)
         {
             return _migration.DropIndex(databaseTable, index);
+        }
+
+        public string AddStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics)
+        {
+            return _migration.AddStatistics(databaseTable, statistics);
+        }
+
+        public string DropStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics)
+        {
+            return _migration.DropStatistics(databaseTable, statistics);
         }
 
         public string AddTrigger(DatabaseTable databaseTable, DatabaseTrigger trigger)

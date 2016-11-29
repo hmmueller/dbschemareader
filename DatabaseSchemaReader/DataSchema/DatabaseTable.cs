@@ -42,6 +42,9 @@ namespace DatabaseSchemaReader.DataSchema
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<DatabaseConstraint> _defaultConstraints;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly List<DatabaseStatistics> _statistics;
+
         #endregion
 
         /// <summary>
@@ -52,6 +55,7 @@ namespace DatabaseSchemaReader.DataSchema
             _columns = new List<DatabaseColumn>();
             _triggers = new List<DatabaseTrigger>();
             _indexes = new List<DatabaseIndex>();
+            _statistics = new List<DatabaseStatistics>();
 
             _foreignKeys = new List<DatabaseConstraint>();
             _foreignKeyChildren = new List<DatabaseTable>();
@@ -290,32 +294,54 @@ namespace DatabaseSchemaReader.DataSchema
         /// <value>
         /// The indexes.
         /// </value>
-        public List<DatabaseIndex> Indexes
-        {
-            get { return _indexes; }
-            set { value.ForEach(AddIndex); }
+        public List<DatabaseIndex> Indexes {
+            get {
+                return _indexes;
+            }
+            set {
+                value.ForEach(AddIndex);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the statistics.
+        /// </summary>
+        /// <value>
+        /// The statistics.
+        /// </value>
+        public List<DatabaseStatistics> Statistics {
+            get {
+                return _statistics;
+            }
+            set {
+                value.ForEach(AddStatistics);
+            }
         }
 
         /// <summary>
         /// Adds an index.
         /// </summary>
         /// <param name="index">The index.</param>
-        public void AddIndex(DatabaseIndex index)
-        {
+        public void AddIndex(DatabaseIndex index) {
             Indexes.Add(index);
 
-            foreach (DatabaseColumn column in index.Columns)
-            {
+            foreach (DatabaseColumn column in index.Columns) {
                 string name = column.Name;
-                foreach (DatabaseColumn col in Columns)
-                {
-                    if (col.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    {
+                foreach (DatabaseColumn col in Columns) {
+                    if (col.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) {
                         col.IsIndexed = true;
                         break;
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds an index.
+        /// </summary>
+        /// <param name="statistics">The index.</param>
+        public void AddStatistics(DatabaseStatistics statistics) {
+            Statistics.Add(statistics);
         }
 
         /// <summary>

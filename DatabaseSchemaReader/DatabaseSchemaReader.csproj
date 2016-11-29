@@ -106,6 +106,7 @@
     <Compile Include="CodeGen\Procedures\SprocWriter.cs" />
     <Compile Include="CodeGen\UnitTestWriter.cs" />
     <Compile Include="Compare\CompareColumns.cs" />
+    <Compile Include="Compare\CompareStatistics.cs" />
     <Compile Include="Compare\CompareResult.cs" />
     <Compile Include="Compare\CompareTables.cs" />
     <Compile Include="Compare\CompareSchemas.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Conversion\Loaders\AllTablesLoader.cs" />
     <Compile Include="Conversion\Loaders\TableLoader.cs" />
     <Compile Include="Conversion\PrimaryKeyLogic.cs" />
+    <Compile Include="DataSchema\DatabaseStatistics.cs" />
     <Compile Include="DataSchema\INamedSchemaObject.cs" />
     <Compile Include="DataSchema\ProviderToSqlType.cs" />
     <Compile Include="Conversion\SchemaConstraintConverter.cs" />
@@ -281,6 +283,7 @@
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\DefaultConstraints.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Functions.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\IdentityColumns.cs" />
+    <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Statistics.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Indexes.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ProcedureArguments.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ViewSources.cs" />

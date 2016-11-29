@@ -124,9 +124,14 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
             return new List<DatabaseTable>();
         }
 
-        public virtual IList<DatabaseIndex> Indexes(string tableName)
+        public virtual IList<DatabaseIndex> Indexes(string tableName) 
         {
             return new List<DatabaseIndex>();
+        }
+
+        public virtual IList<DatabaseStatistics> Statistics(string tableName)
+        {
+            return new List<DatabaseStatistics>();
         }
 
         public virtual IList<DatabaseIndex> IndexColumns(string tableName)

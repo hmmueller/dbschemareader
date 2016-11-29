@@ -133,6 +133,22 @@ namespace DatabaseSchemaReader.SqlGen
         string DropIndex(DatabaseTable databaseTable, DatabaseIndex index);
 
         /// <summary>
+        /// Adds the statistics.
+        /// </summary>
+        /// <param name="databaseTable">The database table.</param>
+        /// <param name="statistics">The statistics.</param>
+        /// <returns></returns>
+        string AddStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics);
+
+        /// <summary>
+        /// Drops the statistics.
+        /// </summary>
+        /// <param name="databaseTable">The database table.</param>
+        /// <param name="statistics">The statistics.</param>
+        /// <returns></returns>
+        string DropStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics);
+
+        /// <summary>
         /// Adds the trigger.
         /// </summary>
         /// <param name="databaseTable">The database table.</param>

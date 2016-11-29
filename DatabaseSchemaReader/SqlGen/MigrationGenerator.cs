@@ -295,12 +295,18 @@ namespace DatabaseSchemaReader.SqlGen
             return null; //only applies to Oracle, so see it's override
         }
 
-        public virtual string DropIndex(DatabaseTable databaseTable, DatabaseIndex index)
-        {
+        public virtual string DropIndex(DatabaseTable databaseTable, DatabaseIndex index) {
             return string.Format(CultureInfo.InvariantCulture,
                 "DROP INDEX {0}{1} ON {2};",
                 SchemaPrefix(index.SchemaOwner),
                 Escape(index.Name),
+                TableName(databaseTable));
+        }
+
+        public virtual string DropStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics) {
+            return string.Format(CultureInfo.InvariantCulture,
+                "DROP STATISTICS {0} ON {1};",
+                Escape(statistics.Name),
                 TableName(databaseTable));
         }
 
@@ -354,10 +360,8 @@ namespace DatabaseSchemaReader.SqlGen
             return sb.ToString();
         }
 
-        public string AddIndex(DatabaseTable databaseTable, DatabaseIndex index)
-        {
-            if (index.Columns.Count == 0)
-            {
+        public string AddIndex(DatabaseTable databaseTable, DatabaseIndex index) {
+            if (index.Columns.Count == 0) {
                 //IndexColumns errors 
                 return "-- add index " + index.Name + " (unknown columns)";
             }
@@ -370,6 +374,19 @@ namespace DatabaseSchemaReader.SqlGen
                 Escape(index.Name),
                 TableName(databaseTable),
                 GetColumnList(index.Columns.Select(i => i.Name))) + LineEnding();
+        }
+
+        public string AddStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics) {
+            if (statistics.Columns.Count == 0) {
+                //StatisticsColumns errors 
+                return "-- add statistics " + statistics.Name + " (unknown columns)";
+            }
+
+            return string.Format(CultureInfo.InvariantCulture,
+                "CREATE STATISTICS {0} ON {1}({2})",
+                Escape(statistics.Name),
+                TableName(databaseTable),
+                GetColumnList(statistics.Columns.Select(i => i.Name))) + LineEnding();
         }
 
         protected virtual string DropForeignKeyFormat

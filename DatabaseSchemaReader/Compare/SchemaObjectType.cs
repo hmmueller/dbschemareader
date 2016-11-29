@@ -42,8 +42,13 @@
         /// </summary>
         Sequence,
         /// <summary>
-        /// package
+        /// package - Oracls concept
         /// </summary>
         Package,
+
+        /// <summary>
+        /// statistics - SQL Server concept
+        /// </summary>
+        Statistics,
     }
 }

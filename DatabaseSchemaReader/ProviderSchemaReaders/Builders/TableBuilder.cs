@@ -29,8 +29,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
             SchemaObjectType schemaObjectType,
             string name, int? index, int? count)
         {
-            ReaderEventArgs.RaiseEvent(ReaderProgress, this, progressType, schemaObjectType,
-    name, index, count);
+            ReaderEventArgs.RaiseEvent(ReaderProgress, this, progressType, schemaObjectType, name, index, count);
         }
 
         private IList<DatabaseTable> EmptyList()
@@ -65,6 +64,8 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
             var colDescs = _readerAdapter.ColumnDescriptions(tableName);
 
             var indexes = MergeIndexColumns(_readerAdapter.Indexes(tableName), _readerAdapter.IndexColumns(tableName));
+            var statistics = _readerAdapter.Statistics(tableName);
+
             if (columns.Count == 0) return null;
 
             var table = new DatabaseTable
@@ -81,6 +82,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
             UpdateConstraints(table, fks, ConstraintType.ForeignKey);
             UpdateConstraints(table, dfs, ConstraintType.Default);
             UpdateIndexes(table, indexes);
+            UpdateStatistics(table, statistics);
             UpdateTriggers(table, triggers);
             UpdateTableDescriptions(table, tableDescs);
             UpdateColumnDescriptions(table, colDescs);
@@ -190,13 +192,19 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
             table.Triggers.AddRange(tableTriggers);
         }
 
-        private void UpdateIndexes(DatabaseTable table, IList<DatabaseIndex> indexes)
-        {
+        private void UpdateIndexes(DatabaseTable table, IList<DatabaseIndex> indexes) {
             var tableIndexes = indexes.Where(x => x.SchemaOwner == table.SchemaOwner &&
                                                 x.TableName == table.Name);
-            foreach (var index in tableIndexes)
-            {
+            foreach (var index in tableIndexes) {
                 table.AddIndex(index);
+            }
+        }
+
+        private void UpdateStatistics(DatabaseTable table, IList<DatabaseStatistics> statistics) {
+            var tableStatistics = statistics.Where(x => x.SchemaOwner == table.SchemaOwner &&
+                                                x.TableName == table.Name);
+            foreach (var stats in tableStatistics) {
+                table.AddStatistics(stats);
             }
         }
 
