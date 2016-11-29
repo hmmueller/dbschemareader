@@ -8,35 +8,33 @@ using DatabaseSchemaReader.DataSchema;
 namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
 {
     class Statistics : SqlExecuter<DatabaseStatistics>
-        {
+    {
         private readonly string _tableName;
 
         public Statistics(string owner, string tableName)
         {
             _tableName = tableName;
             Owner = owner;
-////            Sql = @" SELECT 
-////     SchemaName = SCHEMA_NAME(t.schema_id),
-////     TableName = t.name,
-////     IndexName = ind.name,
-////     ColumnName = col.name,
-////     INDEX_TYPE = ind.type_desc,
-////     IsPrimary = is_primary_key,
-////     IsUnique = is_unique_constraint
-////FROM 
-////     sys.indexes ind 
-////INNER JOIN 
-////     sys.index_columns ic ON  ind.object_id = ic.object_id and ind.index_id = ic.index_id 
-////INNER JOIN 
-////     sys.columns col ON ic.object_id = col.object_id and ic.column_id = col.column_id 
-////INNER JOIN 
-////     sys.tables t ON ind.object_id = t.object_id 
-////WHERE 
-////    (t.name = @TableName OR @TableName IS NULL) AND 
-////    (SCHEMA_NAME(t.schema_id) = @schemaOwner OR @schemaOwner IS NULL) AND 
-////	 t.is_ms_shipped = 0 
-////ORDER BY 
-////     t.name, ind.name, col.name";
+            Sql = @"SELECT
+    SchemaName = SCHEMA_NAME(t.schema_id),
+    TableName = t.name,
+    StatisticsName = st.name,
+    ColumnName = col.name
+FROM
+    sys.stats st
+INNER JOIN
+    sys.stats_columns stc ON st.object_id = stc.object_id and st.stats_id = stc.stats_id
+INNER JOIN 
+    sys.columns col ON stc.object_id = col.object_id and stc.column_id = col.column_id 
+INNER JOIN 
+    sys.tables t ON st.object_id = t.object_id 
+WHERE 
+    (t.name = @TableName OR @TableName IS NULL) AND 
+    (SCHEMA_NAME(t.schema_id) = @schemaOwner OR @schemaOwner IS NULL) AND 
+        t.is_ms_shipped = 0 
+ORDER BY 
+        t.name, st.name, col.name
+";
 
         }
 
@@ -63,7 +61,8 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
                 Result.Add(statistics);
             }
             var colName = record.GetString("ColumnName");
-            if (string.IsNullOrEmpty(colName)) return;
+            if (string.IsNullOrEmpty(colName))
+                return;
 
             var col = new DatabaseColumn
             {
