@@ -112,6 +112,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
             var computed = _readerAdapter.ComputedColumns(null);
             var indexes = MergeIndexColumns(_readerAdapter.Indexes(null), _readerAdapter.IndexColumns(null));
             var noIndexes = (indexes.Count == 0); //we may not be able to get any indexes without a tableName
+            var statistics = _readerAdapter.Statistics(null);
 
             var tableFilter = _readerAdapter.Parameters.Exclusions.TableFilter;
             if (tableFilter != null)
@@ -154,6 +155,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
                     indexes = MergeIndexColumns(_readerAdapter.Indexes(tableName), _readerAdapter.IndexColumns(tableName));
                 }
                 UpdateIndexes(table, indexes);
+                UpdateStatistics(table, statistics);
                 UpdateTriggers(table, triggers);
                 UpdateTableDescriptions(table, tableDescs);
                 UpdateColumnDescriptions(table, colDescs);
