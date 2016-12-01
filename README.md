@@ -75,27 +75,25 @@ There are two simple UIs.
 
 ## Extensions by @hmmueller
 
-My plan is to add more server-specific support for a project where we need extended database schema comparison of SQL server databases.
+My plan is to add more server-specific support for a project where we need extended database schema comparison of Sql Server databases.
 The philosophy I will follow is the following:
-* For "structural elements", I will introduce new classes in DatabaseSchema. Like "DatabasePackage" (PACKAGE is an Oracle-specific thing), I'll add some concepts which we need, the first being SQL-Server STATISTICS. Of course, the question is whether a general tool like dbschemareader should be "polluted" with vendor-specific extensions? On the other hand, what can I do? - I need them (in the comparison)!
-* For "simple properties", I will add a generic, dictionary-like approach so that each class in DatabaseSchema can retrieve and hold simple information. The access to this information is string-key-based and by directly using the key as a column name in the database's meta-information. This will lead to SqlExceptions in ReadAll() if a wrong key is passed. The feature is "opt-in", i.e., the corresponding joins in the meta-model sql statements are only added, and the properties retrieved, if they are specified.
+* For "structural elements", I will introduce new classes in DatabaseSchema. Like "DatabasePackage" (PACKAGE is an Oracle-specific thing), I'll add some concepts which we need, the first being Sql Server STATISTICS. Of course, the question is whether a general tool like dbschemareader should be "polluted" with vendor-specific extensions like that? On the other hand, what can I do? - I need them (in the comparison)!
+* For "simple properties", I will add a generic, dictionary-like approach so that each class below DatabaseSchema can hold simple information retrieved from suitable meta information in the database. The access to this information is string-key-based, and the keys are exactly the column names in the database's meta-information. This will lead to SqlExceptions in ReadAll() if a wrong key is passed. The feature is "opt-in", i.e., the corresponding joins in the meta-model sql statements are only added, and the properties retrieved, if they are specified.
 
 ### API to retrieve additional properties for columns
 
-The following excerpt from a unit test shows how to get the "is_sparse" and "collation_name" additional properties from SQL server database columns:
+The following excerpt from a unit test shows how to get the "is_sparse" and "collation_name" additional properties from Sql Server database columns:
 
 ```C#
 var isSparseProperty = "is_sparse";
 var collationProperty = "collation_name";
 DatabaseReader dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
 {
-    AdditionalColumnPropertyNames = new[] { isSparseProperty , collationProperty }
+    AdditionalColumnPropertyNames = new[] { isSparseProperty, collationProperty }
 });
 
-//act
 DatabaseSchema schema = dbReader.ReadAll();
 
-//assert
 var table = schema.FindTableByName(tableName);
 Assert.IsTrue(table.Columns.All(c => c.GetAdditionalProperty(isSparseProperty) != null));
 Assert.IsTrue(table.Columns
@@ -105,7 +103,7 @@ Assert.IsTrue(table.Columns
 
 ### API to retrieve additional database information
 
-As a representative of the database, the DatabaseSchema object also can contain additional properties. Here is an example fomr a unit test that shows how to retrieve the collation for the SQL server database read in:
+As a representative of the database, the DatabaseSchema object also can contain additional properties. Here is an example from a unit test that shows how to retrieve the collation for a Sql Server database:
 ```C#
 var collationProperty = "collation_name";
 DatabaseReader dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
@@ -122,7 +120,7 @@ Assert.IsNotNull(schema.TopLevelProperties.Get(collationProperty));
 
 The design is more or less straightforward - passing through the required names where they are needed:
 
-a) The SqlExecuter gets them to create the Sql statement in its FormatSql method.
+a) The SqlExecuter gets them to create the Sql statement in its new FormatSql method:
 ```C#
     private string FormatSql(string[] additionalProperties) {
         return string.Format(Sql, // must contain {0} and {1}
@@ -166,10 +164,10 @@ The joins are specified in an additional property AdditionalPropertiesJoin. By c
                  syst.object_id = {0}.object_id AND
                  c.COLUMN_NAME = {0}.Name", ADDITIONAL_INFO);
 ```
-There is one problem with this design: it is not possible to retrieve an additional property that has the same name as a column already present in the base Sql (e.g., "DATA_TYPE" in the example above). But why would one want to that? 
-Possible scenarios might be a comparer that works "generally" on all properties; or the possibility to specify * for "all additional properties". A way to make that work would be to give all predefined columns an alias that will most probably not be present in some metadata, e.g. 
+There is one problem with this design: It is not possible to retrieve an additional property that has the same name as a column already present in the base Sql (e.g., "DATA_TYPE" in the example above). But why would one want to that? 
+Possible scenarios might be a comparer that works "generally" on all properties; or the possibility to specify * for "all additional properties". A way to make that work would be to give all predefined columns an alias that will most probably not be present in any metadata, e.g. 
 ```C#
-            Sql = @"select c.TABLE_SCHEMA,
+            Sql = @"select c.TABLE_SCHEMA AS _DBSR_TABLE_SCHEMA,
 c.TABLE_NAME AS _DBSR_TABLE_NAME,
 c.COLUMN_NAME AS _DBSR_COLUMN_NAME,
 c.ORDINAL_POSITION AS _DBSR_ORDINAL_POSITION,
