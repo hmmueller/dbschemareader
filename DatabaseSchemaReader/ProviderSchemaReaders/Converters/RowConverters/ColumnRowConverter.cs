@@ -16,7 +16,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Converters.RowConverters
             _keyMap = keyMap;
         }
 
-        public DatabaseColumn Convert(IDataRecord row)
+        public DatabaseColumn Convert(IDataRecord row, string[] additionalProperties = null)
         {
             var column = new DatabaseColumn();
             var columnsKeyMap = _keyMap;
@@ -64,6 +64,14 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Converters.RowConverters
                 column.IsAutoNumber = true;
             if (!string.IsNullOrEmpty(columnsKeyMap.UniqueKey) && row.GetBoolean(columnsKeyMap.UniqueKey))
                 column.IsUniqueKey = true;
+
+            if (additionalProperties != null)
+            {
+                foreach (var s in additionalProperties) {
+                    int ix = row.GetOrdinal(s);
+                    column.AddAdditionalProperty(s, row.IsDBNull(ix) ? null : row.GetValue(ix));
+                }
+            }
 
             return column;
         }

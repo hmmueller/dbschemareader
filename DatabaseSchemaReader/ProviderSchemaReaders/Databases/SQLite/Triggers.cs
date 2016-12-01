@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     class Triggers : SqlExecuter<DatabaseTrigger>
     {
         private readonly string _tableName;
-        public Triggers(string tableName)
+        public Triggers(string tableName, string[] additionalTriggerProperties) : base(additionalTriggerProperties)
         {
             _tableName = tableName;
 

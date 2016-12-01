@@ -4,13 +4,15 @@ using DatabaseSchemaReader.DataSchema;
 
 namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
 {
-    internal class ViewColumns
+    internal class ViewColumns 
     {
         private readonly string _viewName;
+        private readonly string[] _additionalColumnProperties;
 
-        public ViewColumns(string viewName)
+        public ViewColumns(string viewName, string[] additionalColumnProperties)
         {
             _viewName = viewName;
+            _additionalColumnProperties = additionalColumnProperties;
             PragmaSql = @"PRAGMA table_info('{0}')";
         }
 
@@ -19,7 +21,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
 
         public IList<DatabaseColumn> Execute(DbConnection connection)
         {
-            var views = new Views(_viewName).Execute(connection);
+            var views = new Views(_viewName, _additionalColumnProperties).Execute(connection);
 
             foreach (var view in views)
             {

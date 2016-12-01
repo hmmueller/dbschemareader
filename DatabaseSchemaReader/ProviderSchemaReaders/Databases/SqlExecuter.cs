@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
 {
 
-    abstract class SqlExecuter<T> : SqlExecuter where T : new()
+    internal abstract class SqlExecuter<T> : SqlExecuter where T : new()
     {
+        protected SqlExecuter(string[] additionalProperties) : base(additionalProperties) {
+        }
 
         protected List<T> Result { get; } = new List<T>();
 
@@ -16,10 +19,22 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
 
     abstract class SqlExecuter
     {
+        public const string ADDITIONAL_INFO = "ADDITIONAL_INFO";
+        protected readonly string[] _additionalProperties;
+
+        protected SqlExecuter(string[] additionalProperties)
+        {
+            _additionalProperties = additionalProperties;
+        }
 
         public string Sql { get; set; }
 
         public string Owner { get; set; }
+
+        protected string AdditionalPropertiesJoin
+        {
+            private get; set;
+        }
 
         protected void ExecuteDbReader(DbConnection connection)
         {
@@ -27,10 +42,11 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
             {
                 connection.Open();
             }
-            Trace.WriteLine($"Sql: {Sql}");
+            var sql = FormatSql(_additionalProperties);
+            Trace.WriteLine($"Sql: {sql}");
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = Sql;
+                cmd.CommandText = sql;
                 AddParameters(cmd);
                 using (var dr = cmd.ExecuteReader())
                 {
@@ -40,6 +56,12 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
                     }
                 }
             }
+        }
+
+        private string FormatSql(string[] additionalProperties) {
+            return string.Format(Sql, // must contain {0} and {1}
+                additionalProperties == null ? "" : string.Join("", additionalProperties.Select(c => ", " + ADDITIONAL_INFO + "." + c).ToArray()),
+                additionalProperties == null ? "" : AdditionalPropertiesJoin);
         }
 
         protected static DbParameter AddDbParameter(DbCommand command, string parameterName, object value, DbType? dbType = null)

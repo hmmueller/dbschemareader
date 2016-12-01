@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using DatabaseSchemaReader;
+using DatabaseSchemaReader.ProviderSchemaReaders.Adapters;
 using DatabaseSchemaReaderTest.IntegrationTests;
 
 namespace DatabaseSchemaReaderTest
@@ -46,14 +47,15 @@ namespace DatabaseSchemaReaderTest
         /// <summary>
         /// Gets the SqlServer NorthWind reader.
         /// </summary>
+        /// <param name="additionalParameters"></param>
         /// <returns></returns>
-        public static DatabaseReader GetNorthwindReader()
+        public static DatabaseReader GetNorthwindReader(IAdditionalProperties additionalParameters = null)
         {
             const string providername = "System.Data.SqlClient";
             var connectionString = ConnectionStrings.Northwind;
             ProviderChecker.Check(providername, connectionString);
 
-            var northwindReader = new DatabaseReader(connectionString, providername);
+            var northwindReader = new DatabaseReader(connectionString, providername, additionalParameters);
             northwindReader.Owner = "dbo";
             return northwindReader;
         }

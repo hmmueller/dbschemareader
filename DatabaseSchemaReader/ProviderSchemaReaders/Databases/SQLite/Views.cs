@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _viewName;
 
-        public Views(string viewName)
+        public Views(string viewName, string[] additionalViewProperties) : base(additionalViewProperties)
         {
             _viewName = viewName;
             Sql = @"SELECT name, sql FROM sqlite_master

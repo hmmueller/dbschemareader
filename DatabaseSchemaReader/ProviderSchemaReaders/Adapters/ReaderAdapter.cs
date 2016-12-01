@@ -45,9 +45,47 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 
         public virtual string Owner
         {
-            get { return Parameters.Owner; }
-            set { Parameters.Owner = value; }
+            get
+            {
+                return Parameters.Owner;
+            }
+            set
+            {
+                Parameters.Owner = value;
+            }
         }
+
+        public IAdditionalProperties AdditionalParameters
+        {
+            get; set;
+        }
+
+        internal string[] AdditionalProcedureArgumentProperties => AdditionalParameters?.AdditionalProcedureArgumentPropertyNames;
+        internal string[] AdditionalColumnProperties => AdditionalParameters?.AdditionalColumnPropertyNames;
+        internal string[] AdditionalComputedColumnProperties => AdditionalParameters?.AdditionalComputedColumnPropertyNames;
+        internal string[] AdditionalIdentityColumnProperties => AdditionalParameters?.AdditionalIdentityColumnPropertyNames;
+        internal string[] AdditionalViewColumnProperties => AdditionalParameters?.AdditionalViewColumnPropertyNames;
+        internal string[] AdditionalCheckConstraintProperties => AdditionalParameters?.AdditionalCheckConstraintPropertyNames;
+        internal string[] AdditionalDefaultConstraintProperties => AdditionalParameters?.AdditionalDefaultConstraintPropertyNames;
+        internal string[] AdditionalForeignKeyProperties => AdditionalParameters?.AdditionalForeignKeyPropertyNames;
+        internal string[] AdditionalPrimaryKeyProperties => AdditionalParameters?.AdditionalPrimaryKeyPropertyNames;
+        internal string[] AdditionalUniqueKeyProperties => AdditionalParameters?.AdditionalUniqueKeyPropertyNames;
+        internal string[] AdditionalFunctionProperties => AdditionalParameters?.AdditionalFunctionPropertyNames;
+        internal string[] AdditionalIndexColumnProperties => AdditionalParameters?.AdditionalIndexColumnPropertyNames;
+        internal string[] AdditionalIndexProperties => AdditionalParameters?.AdditionalIndexPropertyNames;
+        internal string[] AdditionalPackageProperties => AdditionalParameters?.AdditionalPackagePropertyNames;
+        internal string[] AdditionalSequenceProperties => AdditionalParameters?.AdditionalSequencePropertyNames;
+        internal string[] AdditionalStatisticsProperties => AdditionalParameters?.AdditionalStatisticsPropertyNames;
+        internal string[] AdditionalStoredProcedureProperties => AdditionalParameters?.AdditionalStoredProcedurePropertyNames;
+        internal string[] AdditionalColumnDescriptionProperties => AdditionalParameters?.AdditionalColumnDescriptionPropertyNames;
+        internal string[] AdditionalTableDescriptionProperties => AdditionalParameters?.AdditionalTableDescriptionPropertyNames;
+        internal string[] AdditionalTableProperties => AdditionalParameters?.AdditionalTablePropertyNames;
+        internal string[] AdditionalTopLevelProperties => AdditionalParameters?.AdditionalTopLevelPropertyNames;
+        internal string[] AdditionalTriggerProperties => AdditionalParameters?.AdditionalTriggerPropertyNames;
+        internal string[] AdditionalUserProperties => AdditionalParameters?.AdditionalUserPropertyNames;
+        internal string[] AdditionalViewProperties => AdditionalParameters?.AdditionalViewPropertyNames;
+        internal string[] AdditionalProcedureSourceProperties => AdditionalParameters?.AdditionalProcedureSourcePropertyNames;
+        internal string[] AdditionalViewSourceProperties => AdditionalParameters?.AdditionalViewSourcePropertyNames;
 
         public virtual IList<DataType> DataTypes()
         {
@@ -124,7 +162,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
             return new List<DatabaseTable>();
         }
 
-        public virtual IList<DatabaseIndex> Indexes(string tableName) 
+        public virtual IList<DatabaseIndex> Indexes(string tableName)
         {
             return new List<DatabaseIndex>();
         }
@@ -177,6 +215,11 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
         public virtual IList<DatabaseUser> Users()
         {
             return new List<DatabaseUser>();
+        }
+
+        public virtual SerializableAdditionalProperties TopLevelProperties()
+        {
+            return new SerializableAdditionalProperties();
         }
 
         public virtual void PostProcessing(DatabaseTable databaseTable)

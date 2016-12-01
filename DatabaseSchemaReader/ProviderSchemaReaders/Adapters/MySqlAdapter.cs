@@ -17,90 +17,90 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 
         public override IList<DatabaseTable> Tables(string tableName)
         {
-            return new Tables(Owner, tableName)
+            return new Tables(Owner, tableName, AdditionalTableProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> Columns(string tableName)
         {
-            return new Columns(Owner, tableName)
+            return new Columns(Owner, tableName, AdditionalColumnProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> ComputedColumns(string tableName)
         {
-            return new ComputedColumns(Owner, tableName)
+            return new ComputedColumns(Owner, tableName, AdditionalComputedColumnProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseView> Views(string viewName)
         {
-            return new Views(Owner, viewName)
+            return new Views(Owner, viewName, AdditionalViewProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> ViewColumns(string viewName)
         {
-            return new ViewColumns(Owner, viewName)
+            return new ViewColumns(Owner, viewName, AdditionalViewColumnProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> PrimaryKeys(string tableName)
         {
-            return new Constraints(Owner, tableName, ConstraintType.PrimaryKey)
+            return new Constraints(Owner, tableName, ConstraintType.PrimaryKey, AdditionalPrimaryKeyProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> UniqueKeys(string tableName)
         {
-            return new Constraints(Owner, tableName, ConstraintType.UniqueKey)
+            return new Constraints(Owner, tableName, ConstraintType.UniqueKey, AdditionalUniqueKeyProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> ForeignKeys(string tableName)
         {
-            return new Constraints(Owner, tableName, ConstraintType.ForeignKey)
+            return new Constraints(Owner, tableName, ConstraintType.ForeignKey, AdditionalForeignKeyProperties) 
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> IdentityColumns(string tableName)
         {
-            return new IdentityColumns(Owner, tableName)
+            return new IdentityColumns(Owner, tableName, AdditionalIdentityColumnProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseIndex> Indexes(string tableName)
         {
-            return new Indexes(Owner, tableName)
+            return new Indexes(Owner, tableName, AdditionalIndexProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseTrigger> Triggers(string tableName)
         {
-            return new Triggers(Owner, tableName)
+            return new Triggers(Owner, tableName, AdditionalTriggerProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseStoredProcedure> StoredProcedures(string name)
         {
-            return new StoredProcedures(Owner, name)
+            return new StoredProcedures(Owner, name, AdditionalStoredProcedureProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseFunction> Functions(string name)
         {
-            return new Functions(Owner, name)
+            return new Functions(Owner, name, AdditionalFunctionProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseArgument> ProcedureArguments(string name)
         {
-            return new ProcedureArguments(Owner, name)
+            return new ProcedureArguments(Owner, name, AdditionalProcedureArgumentProperties)
                 .Execute(DbConnection);
         }
         public override IList<DatabaseUser> Users()
         {
-            return new Users().Execute(DbConnection);
+            return new Users(AdditionalUserProperties).Execute(DbConnection);
         }
     }
 }

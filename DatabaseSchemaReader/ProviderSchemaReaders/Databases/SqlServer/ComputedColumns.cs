@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _tableName;
 
-        public ComputedColumns(string owner, string tableName)
+        public ComputedColumns(string owner, string tableName, string[] additionalComputedColumnProperties) : base(additionalComputedColumnProperties)
         {
             _tableName = tableName;
             Owner = owner;

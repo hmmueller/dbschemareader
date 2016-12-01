@@ -15,7 +15,10 @@ namespace DatabaseSchemaReader.DataSchema
         /// <value>
         /// The table name.
         /// </value>
-        public string Name { get; set; }
+        public string Name
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the tag.
@@ -23,7 +26,10 @@ namespace DatabaseSchemaReader.DataSchema
         /// <value>
         /// The tag.
         /// </value>
-        public object Tag { get; set; }
+        public object Tag
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -38,7 +44,8 @@ namespace DatabaseSchemaReader.DataSchema
             {
                 return false;
             }
-            if (Name == null && other.Name == null) return Equals(this, other);
+            if (Name == null && other.Name == null)
+                return Equals(this, other);
             return (Name == other.Name);
         }
 
@@ -59,8 +66,9 @@ namespace DatabaseSchemaReader.DataSchema
                 return false;
             }
 
-            var o = (NamedObject<T>)obj;
-            if (Name == null && o.Name == null) return base.Equals(obj);
+            var o = (NamedObject<T>) obj;
+            if (Name == null && o.Name == null)
+                return base.Equals(obj);
             return (Name == o.Name);
         }
 
@@ -72,9 +80,25 @@ namespace DatabaseSchemaReader.DataSchema
         /// </returns>
         public override int GetHashCode()
         {
-            if (string.IsNullOrEmpty(Name)) return base.GetHashCode(); //transient instance
+            if (string.IsNullOrEmpty(Name))
+                return base.GetHashCode(); //transient instance
             return Name.GetHashCode();
         }
 
+        private SerializableAdditionalProperties _additionalProperties;
+
+        protected NamedObject()
+        {
+            _additionalProperties = new SerializableAdditionalProperties();
+        }
+
+        public void AddAdditionalProperty(string name, object value)
+        {
+            _additionalProperties.Add(name, value);
+        }
+
+        public object GetAdditionalProperty(string name) {
+            return _additionalProperties.Get(name);
+        }
     }
 }

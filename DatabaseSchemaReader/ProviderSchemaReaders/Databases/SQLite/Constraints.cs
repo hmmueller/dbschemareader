@@ -8,10 +8,13 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     class Constraints
     {
         private readonly string _tableName;
+        private readonly string[] _additionalForeignKeyProperties;
 
-        public Constraints(string tableName)
+        public Constraints(string tableName, string[] additionalForeignKeyProperties)
         {
             _tableName = tableName;
+            _additionalForeignKeyProperties = additionalForeignKeyProperties;
+            // TODO: use _additionalForeignKeyProperties 
             PragmaSql = @"PRAGMA foreign_key_list('{0}')";
         }
 
@@ -20,7 +23,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
 
         public IList<DatabaseConstraint> Execute(DbConnection connection)
         {
-            var tables = new Tables(_tableName).Execute(connection);
+            var tables = new Tables(_tableName, new string[0]).Execute(connection);
 
             foreach (var table in tables)
             {

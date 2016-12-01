@@ -11,7 +11,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _tableName;
 
-        public Indexes(string tableName)
+        public Indexes(string tableName, string[] additionalIndexProperties) : base(additionalIndexProperties)
         {
             _tableName = tableName;
             Sql = @"SELECT

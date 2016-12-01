@@ -13,6 +13,10 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
         /// </summary>
         private int? _version;
 
+        protected OracleSqlExecuter(string[] additionalSequenceProperties) : base(additionalSequenceProperties) {
+
+        }
+
         /// <summary>
         /// Parse out the server version (9, 10, 11 or 12, hopefully)
         /// </summary>

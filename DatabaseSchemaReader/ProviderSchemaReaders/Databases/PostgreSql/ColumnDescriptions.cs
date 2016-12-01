@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
     {
         private readonly string _tableName;
 
-        public ColumnDescriptions(string owner, string tableName)
+        public ColumnDescriptions(string owner, string tableName, string[] additionalColumnDescriptionProperties) : base(additionalColumnDescriptionProperties)
         {
             _tableName = tableName;
             Owner = owner;

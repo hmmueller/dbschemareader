@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
 {
     class Users : SqlExecuter<DatabaseUser>
     {
-        public Users()
+        public Users(string[] additionalUserProperties) : base(additionalUserProperties)
         {
             Sql = @"SELECT USERNAME AS name
 FROM ALL_USERS

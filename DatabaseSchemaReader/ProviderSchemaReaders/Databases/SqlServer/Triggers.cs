@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     class Triggers : SqlExecuter<DatabaseTrigger>
     {
         private readonly string _tableName;
-        public Triggers(string owner, string tableName)
+        public Triggers(string owner, string tableName, string[] additionalTriggerProperties) : base(additionalTriggerProperties)
         {
             _tableName = tableName;
             Owner = owner;

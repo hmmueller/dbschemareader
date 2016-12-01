@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _name;
 
-        public StoredProcedures(string owner, string name)
+        public StoredProcedures(string owner, string name, string[] additionalStoredProcedureProperties) : base(additionalStoredProcedureProperties)
         {
             _name = name;
             Owner = owner;

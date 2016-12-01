@@ -11,7 +11,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
     {
         private readonly string _tableName;
 
-        public Indexes(string owner, string tableName)
+        public Indexes(string owner, string tableName, string[] additionalIndexProperties) : base(additionalIndexProperties)
         {
             _tableName = tableName;
             Owner = owner;

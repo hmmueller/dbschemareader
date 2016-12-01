@@ -181,6 +181,7 @@
     <Compile Include="DataSchema\DatabaseView.cs" />
     <Compile Include="DataSchema\DataType.cs" />
     <Compile Include="DataSchema\NamedSchemaObject.cs" />
+    <Compile Include="DataSchema\SerializeableAdditionalProperties.cs" />
     <Compile Include="DataSchema\SqlType.cs" />
     <Compile Include="Data\Converter.cs" />
     <Compile Include="Data\DateConverter.cs" />
@@ -194,6 +195,8 @@
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\IFilter.cs" />
     <Compile Include="IDatabaseReader.cs" />
+    <Compile Include="ProviderSchemaReaders\Adapters\AdditionalProperties.cs" />
+    <Compile Include="ProviderSchemaReaders\Adapters\IAdditionalProperties.cs" />
     <Compile Include="ProviderSchemaReaders\ConnectionContext\ConnectionAdapter.cs" />
     <Compile Include="ProviderSchemaReaders\Adapters\DbProviderReaderAdapter.cs" />
     <Compile Include="ProviderSchemaReaders\Adapters\MySqlAdapter.cs" />
@@ -288,6 +291,7 @@
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Statistics.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Indexes.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ProcedureArguments.cs" />
+    <Compile Include="ProviderSchemaReaders\Databases\SqlServer\TopLevelProperties.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ViewSources.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ProcedureSources.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Sequences.cs" />

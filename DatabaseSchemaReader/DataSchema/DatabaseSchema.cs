@@ -33,6 +33,8 @@ namespace DatabaseSchemaReader.DataSchema
         private readonly List<DatabaseFunction> _functions;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<DatabaseUser> _users;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private SerializableAdditionalProperties _topLevelProperties;
         #endregion
 
 
@@ -70,6 +72,7 @@ namespace DatabaseSchemaReader.DataSchema
             _tables = new List<DatabaseTable>();
             _storedProcedures = new List<DatabaseStoredProcedure>();
             _dataTypes = new List<DataType>();
+            _topLevelProperties = new SerializableAdditionalProperties();
         }
 
         /// <summary>
@@ -133,6 +136,13 @@ namespace DatabaseSchemaReader.DataSchema
         /// The owner.
         /// </value>
         public string Owner { get; set; }
+
+        public SerializableAdditionalProperties TopLevelProperties { get { return _topLevelProperties; } }
+
+        public void ReplaceTopLevelProperties(SerializableAdditionalProperties topLevelProperties)
+        {
+            _topLevelProperties = topLevelProperties;
+        }
 
         /// <summary>
         /// Finds a table by name

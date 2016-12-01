@@ -51,8 +51,8 @@ namespace DatabaseSchemaReader
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
-        public DatabaseReader(string connectionString, string providerName)
-            : this(new DatabaseSchema(connectionString, providerName))
+        public DatabaseReader(string connectionString, string providerName, IAdditionalProperties additionalParameters = null)
+            : this(new DatabaseSchema(connectionString, providerName), additionalParameters)
         {
         }
 
@@ -61,11 +61,15 @@ namespace DatabaseSchemaReader
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="sqlType">Type of the SQL.</param>
-        public DatabaseReader(string connectionString, SqlType sqlType)
+        /// <param name="additionalParameters"></param>
+        public DatabaseReader(string connectionString, SqlType sqlType, IAdditionalProperties additionalParameters = null)
         {
-            if (connectionString == null) throw new ArgumentNullException("connectionString");
+            if (connectionString == null)
+                throw new ArgumentNullException("connectionString");
             _schemaParameters = new SchemaParameters(connectionString, sqlType);
             _readerAdapter = ReaderAdapterFactory.Create(_schemaParameters);
+            _readerAdapter.AdditionalParameters = additionalParameters;
+
             //_schemaReader = SchemaReaderFactory.Create(connectionString, sqlType);
             _db = new DatabaseSchema(connectionString, _schemaParameters.ProviderName);
             _schemaParameters.DatabaseSchema = _db;
@@ -77,8 +81,8 @@ namespace DatabaseSchemaReader
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
         /// <param name="owner">The schema owner.</param>
-        public DatabaseReader(string connectionString, string providerName, string owner)
-            : this(new DatabaseSchema(connectionString, providerName) { Owner = owner })
+        public DatabaseReader(string connectionString, string providerName, string owner, IAdditionalProperties additionalParameters = null)
+            : this(new DatabaseSchema(connectionString, providerName) { Owner = owner }, additionalParameters)
         {
         }
 
@@ -86,15 +90,19 @@ namespace DatabaseSchemaReader
         /// Initializes a new instance of the <see cref="DatabaseReader"/> class using an existing <see cref="DatabaseSchema"/>.
         /// </summary>
         /// <param name="databaseSchema">The database schema. Can be a subclassed version.</param>
-        public DatabaseReader(DatabaseSchema databaseSchema)
+        /// <param name="additionalParameters"></param>
+        public DatabaseReader(DatabaseSchema databaseSchema, IAdditionalProperties additionalParameters = null)
         {
-            if (databaseSchema == null) throw new ArgumentNullException("databaseSchema");
-            if (databaseSchema.ConnectionString == null) throw new ArgumentException("No connectionString");
+            if (databaseSchema == null)
+                throw new ArgumentNullException("databaseSchema");
+            if (databaseSchema.ConnectionString == null)
+                throw new ArgumentException("No connectionString");
 
             _schemaParameters = new SchemaParameters(databaseSchema.ConnectionString, databaseSchema.Provider);
             _schemaParameters.DatabaseSchema = databaseSchema;
             _schemaParameters.Owner = databaseSchema.Owner;
             _readerAdapter = ReaderAdapterFactory.Create(_schemaParameters);
+            _readerAdapter.AdditionalParameters = additionalParameters;
             _db = databaseSchema;
         }
 
@@ -116,7 +124,13 @@ namespace DatabaseSchemaReader
         /// <value>
         /// The exclusions.
         /// </value>
-        public Exclusions Exclusions { get { return _schemaParameters.Exclusions; } }
+        public Exclusions Exclusions
+        {
+            get
+            {
+                return _schemaParameters.Exclusions;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the owner user. Always set it with Oracle (otherwise you'll get SYS, MDSYS etc...)
@@ -124,8 +138,14 @@ namespace DatabaseSchemaReader
         /// <value>The user.</value>
         public string Owner
         {
-            get { return _readerAdapter.Owner; }
-            set { _readerAdapter.Owner = value; }
+            get
+            {
+                return _readerAdapter.Owner;
+            }
+            set
+            {
+                _readerAdapter.Owner = value;
+            }
         }
 
         /// <summary>
@@ -133,7 +153,10 @@ namespace DatabaseSchemaReader
         /// </summary>
         public DatabaseSchema DatabaseSchema
         {
-            get { return _db; }
+            get
+            {
+                return _db;
+            }
         }
 
         /// <summary>
@@ -153,28 +176,44 @@ namespace DatabaseSchemaReader
             _fixUp = false;
             using (_readerAdapter.CreateConnection())
             {
-                if (ct.IsCancellationRequested) return _db;
+                if (ct.IsCancellationRequested)
+                    return _db;
                 DataTypes();
 
-                if (ct.IsCancellationRequested) return _db;
+                if (ct.IsCancellationRequested)
+                    return _db;
+                AdditionalTopLevelProperties();
+
+                if (ct.IsCancellationRequested)
+                    return _db;
                 AllUsers();
 
-                if (ct.IsCancellationRequested) return _db;
+                if (ct.IsCancellationRequested)
+                    return _db;
                 AllTables(ct);
 
-                if (ct.IsCancellationRequested) return _db;
+                if (ct.IsCancellationRequested)
+                    return _db;
                 AllViews(ct);
 
-                if (ct.IsCancellationRequested) return _db;
+                if (ct.IsCancellationRequested)
+                    return _db;
                 AllStoredProcedures(ct);
 
-                if (ct.IsCancellationRequested) return _db;
+                if (ct.IsCancellationRequested)
+                    return _db;
                 AllSequences();
             }
             _fixUp = true;
             UpdateReferences();
 
             return _db;
+        }
+
+        private void AdditionalTopLevelProperties()
+        {
+            SerializableAdditionalProperties topLevelProperties = _readerAdapter.TopLevelProperties();
+            DatabaseSchema.ReplaceTopLevelProperties(topLevelProperties);
         }
 
         private void AllSequences()
@@ -226,7 +265,8 @@ namespace DatabaseSchemaReader
         /// </summary>
         public IList<DatabaseTable> AllTables(CancellationToken ct)
         {
-            if (ct.IsCancellationRequested) return new List<DatabaseTable>();
+            if (ct.IsCancellationRequested)
+                return new List<DatabaseTable>();
             RaiseReadingProgress(SchemaObjectType.Tables);
 
             IList<DatabaseTable> tables;
@@ -235,7 +275,8 @@ namespace DatabaseSchemaReader
                 var builder = new TableBuilder(_readerAdapter);
                 tables = builder.Execute(ct);
             }
-            if (ct.IsCancellationRequested) return tables;
+            if (ct.IsCancellationRequested)
+                return tables;
 
             DatabaseSchema.Tables.Clear();
             DatabaseSchema.Tables.AddRange(tables);
@@ -260,14 +301,16 @@ namespace DatabaseSchemaReader
         /// </summary>
         public IList<DatabaseView> AllViews(CancellationToken ct)
         {
-            if (ct.IsCancellationRequested) return DatabaseSchema.Views;
+            if (ct.IsCancellationRequested)
+                return DatabaseSchema.Views;
 
             IList<DatabaseView> views;
             using (_readerAdapter.CreateConnection())
             {
                 var builder = new ViewBuilder(_readerAdapter, Exclusions);
                 var handler = ReaderProgress;
-                if (handler != null) builder.ReaderProgress += RaiseReadingProgress;
+                if (handler != null)
+                    builder.ReaderProgress += RaiseReadingProgress;
                 views = builder.Execute(ct);
             }
 
@@ -284,7 +327,8 @@ namespace DatabaseSchemaReader
         /// <exception cref="System.ArgumentNullException">tableName</exception>
         public bool TableExists(string tableName)
         {
-            if (string.IsNullOrEmpty(tableName)) throw new ArgumentNullException("tableName");
+            if (string.IsNullOrEmpty(tableName))
+                throw new ArgumentNullException("tableName");
             using (_readerAdapter.CreateConnection())
             {
                 var tables = _readerAdapter.Tables(tableName);
@@ -308,14 +352,16 @@ namespace DatabaseSchemaReader
         /// <param name="ct">The ct.</param>
         public DatabaseTable Table(string tableName, CancellationToken ct)
         {
-            if (string.IsNullOrEmpty(tableName)) throw new ArgumentNullException("tableName");
+            if (string.IsNullOrEmpty(tableName))
+                throw new ArgumentNullException("tableName");
 
             DatabaseTable table;
             using (_readerAdapter.CreateConnection())
             {
                 var builder = new TableBuilder(_readerAdapter);
                 var handler = ReaderProgress;
-                if (handler != null) builder.ReaderProgress += RaiseReadingProgress;
+                if (handler != null)
+                    builder.ReaderProgress += RaiseReadingProgress;
                 table = builder.Execute(ct, tableName);
             }
 
@@ -326,7 +372,8 @@ namespace DatabaseSchemaReader
             }
             DatabaseSchema.Tables.Add(table);
 
-            if (ct.IsCancellationRequested) return table;
+            if (ct.IsCancellationRequested)
+                return table;
 
             if (DatabaseSchema.DataTypes.Count > 0)
                 DatabaseSchemaFixer.UpdateDataTypes(DatabaseSchema);
@@ -367,7 +414,8 @@ namespace DatabaseSchemaReader
             {
                 var builder = new ProcedureBuilder(_readerAdapter, DatabaseSchema, Exclusions);
                 var handler = ReaderProgress;
-                if (handler != null) builder.ReaderProgress += RaiseReadingProgress;
+                if (handler != null)
+                    builder.ReaderProgress += RaiseReadingProgress;
                 builder.Execute(ct);
             }
 
@@ -391,7 +439,8 @@ namespace DatabaseSchemaReader
         private void UpdateReferences()
         {
             //a simple latch so ReadAll will only call this at the end
-            if (!_fixUp) return;
+            if (!_fixUp)
+                return;
 
             DatabaseSchemaFixer.UpdateReferences(DatabaseSchema); //updates all references
         }

@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
     {
         private readonly string _tableName;
 
-        public CheckConstraints(string owner, string tableName)
+        public CheckConstraints(string owner, string tableName, string[] additionalCheckConstraintProperties) : base(additionalCheckConstraintProperties)
         {
             _tableName = tableName;
             Owner = owner;

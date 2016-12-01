@@ -12,31 +12,40 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _tableName;
         private readonly ColumnRowConverter _converter;
 
-        public Columns(string owner, string tableName)
+        public Columns(string owner, string tableName, string[] additionalProperties) : base(additionalProperties)
         {
             _tableName = tableName;
             Owner = owner;
             Sql = @"select c.TABLE_SCHEMA, 
 c.TABLE_NAME, 
-COLUMN_NAME, 
-ORDINAL_POSITION, 
-COLUMN_DEFAULT, 
-IS_NULLABLE, 
-DATA_TYPE, 
-CHARACTER_MAXIMUM_LENGTH, 
-NUMERIC_PRECISION, 
-NUMERIC_SCALE, 
-DATETIME_PRECISION 
+c.COLUMN_NAME, 
+c.ORDINAL_POSITION, 
+c.COLUMN_DEFAULT, 
+c.IS_NULLABLE, 
+c.DATA_TYPE, 
+c.CHARACTER_MAXIMUM_LENGTH, 
+c.NUMERIC_PRECISION, 
+c.NUMERIC_SCALE, 
+c.DATETIME_PRECISION 
+{0}
 from INFORMATION_SCHEMA.COLUMNS c
 JOIN INFORMATION_SCHEMA.TABLES t 
  ON c.TABLE_SCHEMA = t.TABLE_SCHEMA AND 
     c.TABLE_NAME = t.TABLE_NAME
+{1}
 where 
     (c.TABLE_SCHEMA = @Owner or (@Owner is null)) and 
     (c.TABLE_NAME = @TableName or (@TableName is null)) AND
     TABLE_TYPE = 'BASE TABLE'
  order by 
     c.TABLE_SCHEMA, c.TABLE_NAME, ORDINAL_POSITION";
+
+            AdditionalPropertiesJoin = string.Format(@"LEFT OUTER JOIN sys.tables syst 
+              ON c.TABLE_SCHEMA = schema_name(syst.schema_id) AND 
+                 c.TABLE_NAME = syst.name
+           LEFT OUTER JOIN sys.columns {0} ON 
+                 syst.object_id = {0}.object_id AND
+                 c.COLUMN_NAME = {0}.Name", ADDITIONAL_INFO);
 
             var keyMap = new ColumnsKeyMap();
             _converter = new ColumnRowConverter(keyMap);
@@ -56,7 +65,7 @@ where
 
         protected override void Mapper(IDataRecord record)
         {
-            var col = _converter.Convert(record);
+            var col = _converter.Convert(record, _additionalProperties);
             Result.Add(col);
         }
     }

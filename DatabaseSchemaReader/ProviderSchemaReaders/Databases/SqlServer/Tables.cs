@@ -9,12 +9,13 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _tableName;
 
-        public Tables(string owner, string tableName)
+        public Tables(string owner, string tableName, string[] additionalTableProperties) : base(additionalTableProperties)
         {
             _tableName = tableName;
             Owner = owner;
-            Sql = @"select TABLE_SCHEMA, TABLE_NAME 
+            Sql = @"select TABLE_SCHEMA, TABLE_NAME {0}
 from INFORMATION_SCHEMA.TABLES 
+{1}
 where 
     (TABLE_SCHEMA = @Owner or (@Owner is null)) and 
     (TABLE_NAME = @TABLE_NAME or (@TABLE_NAME is null)) and 

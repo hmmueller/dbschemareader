@@ -16,37 +16,37 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 
         public override IList<DatabaseTable> Tables(string tableName)
         {
-            return new Tables(Owner, tableName)
+            return new Tables(Owner, tableName, AdditionalTableProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> Columns(string tableName)
         {
-            return new Columns(Owner, tableName)
+            return new Columns(Owner, tableName, AdditionalColumnProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseIndex> Indexes(string tableName)
         {
-            return new Indexes(Owner, tableName)
+            return new Indexes(Owner, tableName, AdditionalIndexProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> PrimaryKeys(string tableName)
         {
-            return new Constraints(Owner, tableName, ConstraintType.PrimaryKey)
+            return new Constraints(Owner, tableName, ConstraintType.PrimaryKey, AdditionalPrimaryKeyProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> UniqueKeys(string tableName)
         {
-            return new Constraints(Owner, tableName, ConstraintType.UniqueKey)
+            return new Constraints(Owner, tableName, ConstraintType.UniqueKey, AdditionalUniqueKeyProperties)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> ForeignKeys(string tableName)
         {
-            return new Constraints(Owner, tableName, ConstraintType.ForeignKey)
+            return new Constraints(Owner, tableName, ConstraintType.ForeignKey, AdditionalForeignKeyProperties)
                 .Execute(DbConnection);
         }
     }

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Linq;
 using DatabaseSchemaReader;
 using DatabaseSchemaReader.Filters;
+using DatabaseSchemaReader.ProviderSchemaReaders.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DatabaseSchemaReaderTest.IntegrationTests
@@ -42,9 +43,12 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
                 //because we loaded only a single table
                 //relations aren't available here (to datatypes/foreign key tables)
                 Debug.Write("\tColumn " + column.Name + "\t" + column.DbDataType);
-                if (column.Length > 0) Debug.Write("(" + column.Length + ")");
-                if (column.IsPrimaryKey) Debug.Write("\tPrimary key");
-                if (column.IsForeignKey) Debug.Write("\tForeign key to " + column.ForeignKeyTableName);
+                if (column.Length > 0)
+                    Debug.Write("(" + column.Length + ")");
+                if (column.IsPrimaryKey)
+                    Debug.Write("\tPrimary key");
+                if (column.IsForeignKey)
+                    Debug.Write("\tForeign key to " + column.ForeignKeyTableName);
                 Debug.WriteLine("");
             }
             //Table Products
@@ -75,9 +79,12 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
                     //relations to datatypes aren't available here
                     //but foreign key tables are linked up
                     Debug.Write("\tColumn " + column.Name + "\t" + column.DbDataType);
-                    if (column.Length > 0) Debug.Write("(" + column.Length + ")");
-                    if (column.IsPrimaryKey) Debug.Write("\tPrimary key");
-                    if (column.IsForeignKey) Debug.Write("\tForeign key to " + column.ForeignKeyTable.Name);
+                    if (column.Length > 0)
+                        Debug.Write("(" + column.Length + ")");
+                    if (column.IsPrimaryKey)
+                        Debug.Write("\tPrimary key");
+                    if (column.IsForeignKey)
+                        Debug.Write("\tForeign key to " + column.ForeignKeyTable.Name);
                     Debug.WriteLine("");
                 }
             }
@@ -107,9 +114,12 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
                 foreach (var column in table.Columns)
                 {
                     Debug.Write("\tColumn " + column.Name + "\t" + column.DataType.TypeName);
-                    if (column.DataType.IsString) Debug.Write("(" + column.Length + ")");
-                    if (column.IsPrimaryKey) Debug.Write("\tPrimary key");
-                    if (column.IsForeignKey) Debug.Write("\tForeign key to " + column.ForeignKeyTable.Name);
+                    if (column.DataType.IsString)
+                        Debug.Write("(" + column.Length + ")");
+                    if (column.IsPrimaryKey)
+                        Debug.Write("\tPrimary key");
+                    if (column.IsForeignKey)
+                        Debug.Write("\tForeign key to " + column.ForeignKeyTable.Name);
                     Debug.WriteLine("");
                 }
                 //Table Products
@@ -218,5 +228,44 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
                             proc.Arguments.Count(),
                             "Number of args changed");
         }
+
+        [TestMethod, TestCategory("SqlServer")]
+        public void ReadNorthwindWithAdditionalColumnProperties()
+        {
+            //arrange
+            const string tableName = "Categories";
+            var isSparseProperty = "is_sparse";
+            var collationProperty = "collation_name";
+            DatabaseReader dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
+            {
+                AdditionalColumnPropertyNames = new[] { isSparseProperty , collationProperty }
+            });
+
+            //act
+            var schema = dbReader.ReadAll();
+
+            //assert
+            var table = schema.FindTableByName(tableName);
+            Assert.IsTrue(table.Columns.All(c => c.GetAdditionalProperty(isSparseProperty) != null));
+            Assert.IsTrue(table.Columns.Where(c => c.DbDataType.ToUpperInvariant().Contains("CHAR")).All(c => c.GetAdditionalProperty(collationProperty) != null));
+        }
+
+        [TestMethod, TestCategory("SqlServer")]
+        public void ReadNorthwindWithAdditionalDatabaseProperties()
+        {
+            //arrange
+            var collationProperty = "collation_name";
+            DatabaseReader dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
+            {
+                AdditionalTopLevelPropertyNames = new[] { collationProperty }
+            });
+
+            //act
+            var schema = dbReader.ReadAll();
+
+            //assert
+            Assert.IsNotNull(schema.TopLevelProperties.Get(collationProperty));
+        }
+
     }
 }

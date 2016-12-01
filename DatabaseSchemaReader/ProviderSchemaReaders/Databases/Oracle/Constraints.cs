@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
         private readonly string _tableName;
         private readonly ConstraintType _constraintType;
 
-        public Constraints(string owner, string tableName, ConstraintType constraintType)
+        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalPrimaryKeyProperties) : base(additionalPrimaryKeyProperties)
         {
             _tableName = tableName;
             _constraintType = constraintType;

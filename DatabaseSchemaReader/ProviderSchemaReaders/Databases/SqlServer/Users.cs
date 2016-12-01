@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
 {
     class Users : SqlExecuter<DatabaseUser>
     {
-        public Users()
+        public Users(string[] additionalUserProperties) : base(additionalUserProperties)
         {
             Sql = @"select name from sysusers";
         }
