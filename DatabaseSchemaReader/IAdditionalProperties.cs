@@ -1,4 +1,4 @@
-﻿namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
+﻿namespace DatabaseSchemaReader
 {
     public interface IAdditionalProperties
     {

@@ -195,8 +195,8 @@
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\IFilter.cs" />
     <Compile Include="IDatabaseReader.cs" />
-    <Compile Include="ProviderSchemaReaders\Adapters\AdditionalProperties.cs" />
-    <Compile Include="ProviderSchemaReaders\Adapters\IAdditionalProperties.cs" />
+    <Compile Include="AdditionalProperties.cs" />
+    <Compile Include="IAdditionalProperties.cs" />
     <Compile Include="ProviderSchemaReaders\ConnectionContext\ConnectionAdapter.cs" />
     <Compile Include="ProviderSchemaReaders\Adapters\DbProviderReaderAdapter.cs" />
     <Compile Include="ProviderSchemaReaders\Adapters\MySqlAdapter.cs" />
