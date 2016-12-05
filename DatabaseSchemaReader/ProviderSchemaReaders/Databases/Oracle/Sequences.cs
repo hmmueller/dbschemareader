@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     class Sequences : OracleSqlExecuter<DatabaseSequence>
     {
 
-        public Sequences(string owner, string[] additionalSequenceProperties) : base(additionalSequenceProperties)
+        public Sequences(string owner, string[] additionalSequencePropertyNames) : base(additionalSequencePropertyNames)
         {
             Owner = owner;
             Sql = @"

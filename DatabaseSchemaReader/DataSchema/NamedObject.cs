@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace DatabaseSchemaReader.DataSchema
 {
@@ -92,13 +95,24 @@ namespace DatabaseSchemaReader.DataSchema
             _additionalProperties = new SerializableAdditionalProperties();
         }
 
-        public void AddAdditionalProperty(string name, object value)
+        public object GetAdditionalProperty(string name)
         {
-            _additionalProperties.Add(name, value);
-        }
-
-        public object GetAdditionalProperty(string name) {
             return _additionalProperties.Get(name);
         }
+
+        public IEnumerable<string> GetAdditionalPropertyNames()
+        {
+            return _additionalProperties.AllNames;
+        }
+
+        public void AddAdditionalProperties(IDataRecord record, string[] additionalPropertyNames)
+        {
+            foreach (var s in additionalPropertyNames ?? Enumerable.Empty<string>())
+            {
+                int ix = record.GetOrdinal(s);
+                _additionalProperties.Add(s, record.IsDBNull(ix) ? null : record.GetValue(ix));
+            }
+        }
+
     }
 }

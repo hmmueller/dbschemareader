@@ -13,7 +13,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
         /// </summary>
         private int? _version;
 
-        protected OracleSqlExecuter(string[] additionalSequenceProperties) : base(additionalSequenceProperties) {
+        protected OracleSqlExecuter(string[] additionalSequencePropertyNames) : base(additionalSequencePropertyNames) {
 
         }
 

@@ -10,21 +10,20 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
 
     internal abstract class SqlExecuter<T> : SqlExecuter where T : new()
     {
-        protected SqlExecuter(string[] additionalProperties) : base(additionalProperties) {
+        protected SqlExecuter(string[] additionalPropertyNames) : base(additionalPropertyNames) {
         }
 
         protected List<T> Result { get; } = new List<T>();
-
     }
 
     abstract class SqlExecuter
     {
         public const string ADDITIONAL_INFO = "ADDITIONAL_INFO";
-        protected readonly string[] _additionalProperties;
+        protected readonly string[] _additionalPropertyNames;
 
-        protected SqlExecuter(string[] additionalProperties)
+        protected SqlExecuter(string[] additionalPropertyNames)
         {
-            _additionalProperties = additionalProperties;
+            _additionalPropertyNames = additionalPropertyNames;
         }
 
         public string Sql { get; set; }
@@ -42,7 +41,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
             {
                 connection.Open();
             }
-            var sql = FormatSql(_additionalProperties);
+            var sql = FormatSql(_additionalPropertyNames);
             Trace.WriteLine($"Sql: {sql}");
             using (var cmd = connection.CreateCommand())
             {

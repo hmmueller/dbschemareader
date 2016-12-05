@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _viewName;
 
-        public ViewColumns(string owner, string viewName, string[] additionalViewColumnProperties) : base(additionalViewColumnProperties)
+        public ViewColumns(string owner, string viewName, string[] additionalViewColumnPropertyNames) : base(additionalViewColumnPropertyNames)
         {
             _viewName = viewName;
             Owner = owner;

@@ -65,13 +65,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Converters.RowConverters
             if (!string.IsNullOrEmpty(columnsKeyMap.UniqueKey) && row.GetBoolean(columnsKeyMap.UniqueKey))
                 column.IsUniqueKey = true;
 
-            if (additionalProperties != null)
-            {
-                foreach (var s in additionalProperties) {
-                    int ix = row.GetOrdinal(s);
-                    column.AddAdditionalProperty(s, row.IsDBNull(ix) ? null : row.GetValue(ix));
-                }
-            }
+            column.AddAdditionalProperties(row, additionalProperties);
 
             return column;
         }

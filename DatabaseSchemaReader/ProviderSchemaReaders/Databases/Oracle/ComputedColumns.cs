@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _tableName;
 
-        public ComputedColumns(string owner, string tableName, string[] additionalComputedColumnProperties) : base(additionalComputedColumnProperties)
+        public ComputedColumns(string owner, string tableName, string[] additionalComputedColumnPropertyNames) : base(additionalComputedColumnPropertyNames)
         {
             _tableName = tableName;
             Owner = owner;

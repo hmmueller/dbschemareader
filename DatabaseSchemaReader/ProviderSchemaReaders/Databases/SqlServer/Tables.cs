@@ -9,19 +9,24 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _tableName;
 
-        public Tables(string owner, string tableName, string[] additionalTableProperties) : base(additionalTableProperties)
+        public Tables(string owner, string tableName, string[] additionalTablePropertyNames) : base(additionalTablePropertyNames)
         {
             _tableName = tableName;
             Owner = owner;
-            Sql = @"select TABLE_SCHEMA, TABLE_NAME {0}
-from INFORMATION_SCHEMA.TABLES 
+            Sql = @"select t.TABLE_SCHEMA, t.TABLE_NAME 
+{0}
+from INFORMATION_SCHEMA.TABLES t
 {1}
 where 
-    (TABLE_SCHEMA = @Owner or (@Owner is null)) and 
-    (TABLE_NAME = @TABLE_NAME or (@TABLE_NAME is null)) and 
-    TABLE_TYPE = 'BASE TABLE'
+    (t.TABLE_SCHEMA = @Owner or (@Owner is null)) and 
+    (t.TABLE_NAME = @TABLE_NAME or (@TABLE_NAME is null)) and 
+    t.TABLE_TYPE = 'BASE TABLE'
  order by 
-    TABLE_SCHEMA, TABLE_NAME";
+    t.TABLE_SCHEMA, t.TABLE_NAME";
+
+            AdditionalPropertiesJoin = string.Format(@"LEFT OUTER JOIN sys.tables {0}  
+              ON t.TABLE_SCHEMA = schema_name({0}.schema_id) AND 
+                 t.TABLE_NAME = {0}.name", ADDITIONAL_INFO);
         }
 
         public IList<DatabaseTable> Execute(DbConnection connection)
@@ -47,6 +52,8 @@ where
                             Name = name,
                             SchemaOwner = schema
                         };
+
+            table.AddAdditionalProperties(record, _additionalPropertyNames);
 
             Result.Add(table);
         }

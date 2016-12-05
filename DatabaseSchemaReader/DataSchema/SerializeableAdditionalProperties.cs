@@ -28,5 +28,7 @@ namespace DatabaseSchemaReader.DataSchema {
             int ix = _additionalPropertyNames.FindIndex(s => s == name);
             return ix < 0 ? null : _additionalPropertyValues[ix];
         }
+
+        public IEnumerable<string> AllNames => _additionalPropertyNames;
     }
 }

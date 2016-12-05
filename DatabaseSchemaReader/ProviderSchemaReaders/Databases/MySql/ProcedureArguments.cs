@@ -11,7 +11,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _name;
 
-        public ProcedureArguments(string owner, string name, string[] additionalProcedureArgumentProperties) : base(additionalProcedureArgumentProperties)
+        public ProcedureArguments(string owner, string name, string[] additionalProcedureArgumentPropertyNames) : base(additionalProcedureArgumentPropertyNames)
         {
             _name = name;
             Owner = owner;

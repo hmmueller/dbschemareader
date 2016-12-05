@@ -12,7 +12,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
         private readonly string _name;
         private readonly Dictionary<long, List<DatabaseArgument>> _requiredDataTypes;
 
-        public ProcedureArguments(string owner, string name, string[] additionalProcedureArgumentProperties) : base(additionalProcedureArgumentProperties)
+        public ProcedureArguments(string owner, string name, string[] additionalProcedureArgumentPropertyNames) : base(additionalProcedureArgumentPropertyNames)
         {
             _name = name;
             Owner = owner;

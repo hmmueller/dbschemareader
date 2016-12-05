@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     class Triggers : OracleSqlExecuter<DatabaseTrigger>
     {
         private readonly string _tableName;
-        public Triggers(string owner, string tableName, string[] additionalTriggerProperties) : base(additionalTriggerProperties)
+        public Triggers(string owner, string tableName, string[] additionalTriggerPropertyNames) : base(additionalTriggerPropertyNames)
         {
             _tableName = tableName;
             Owner = owner;

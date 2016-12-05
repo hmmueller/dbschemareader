@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _tableName;
 
-        public TableDescriptions(string owner, string tableName, string[] additionalTableDescriptionProperties) : base(additionalTableDescriptionProperties)
+        public TableDescriptions(string owner, string tableName, string[] additionalTableDescriptionPropertyNames) : base(additionalTableDescriptionPropertyNames)
         {
             _tableName = tableName;
             Owner = owner;

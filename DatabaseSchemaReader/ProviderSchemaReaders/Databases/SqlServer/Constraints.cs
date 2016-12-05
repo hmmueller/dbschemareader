@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _tableName;
         private readonly ConstraintType _constraintType;
 
-        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalConstraintProperties) : base(additionalConstraintProperties)
+        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalConstraintPropertyNames) : base(additionalConstraintPropertyNames)
         {
             _tableName = tableName;
             _constraintType = constraintType;

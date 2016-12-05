@@ -11,7 +11,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _tableName;
 
-        public Statistics(string owner, string tableName, string[] additionalStatisticsProperties) : base(additionalStatisticsProperties)
+        public Statistics(string owner, string tableName, string[] additionalStatisticsPropertyNames) : base(additionalStatisticsPropertyNames)
         {
             _tableName = tableName;
             Owner = owner;

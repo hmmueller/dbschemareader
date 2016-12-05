@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _name;
 
-        public StoredProcedures(string owner, string name, string[] additionalStoredProcedureProperties) : base(additionalStoredProcedureProperties)
+        public StoredProcedures(string owner, string name, string[] additionalStoredProcedurePropertyNames) : base(additionalStoredProcedurePropertyNames)
         {
             _name = name;
             Owner = owner;

@@ -12,7 +12,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _tableName;
         private readonly ColumnRowConverter _converter;
 
-        public Columns(string owner, string tableName, string[] additionalProperties) : base(additionalProperties)
+        public Columns(string owner, string tableName, string[] additionalPropertyNames) : base(additionalPropertyNames)
         {
             _tableName = tableName;
             Owner = owner;
@@ -65,7 +65,7 @@ where
 
         protected override void Mapper(IDataRecord record)
         {
-            var col = _converter.Convert(record, _additionalProperties);
+            var col = _converter.Convert(record, _additionalPropertyNames);
             Result.Add(col);
         }
     }

@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
 {
     internal class Functions : SqlExecuter<DatabaseFunction>
     {
-        public Functions(string owner, string[] additionalFunctionProperties) : base(additionalFunctionProperties)
+        public Functions(string owner, string[] additionalFunctionPropertyNames) : base(additionalFunctionPropertyNames)
         {
             Owner = owner;
             //Npgsql doesn't have a functions collection, so this is a simple substitute

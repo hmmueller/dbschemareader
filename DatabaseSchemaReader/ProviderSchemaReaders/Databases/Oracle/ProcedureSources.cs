@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _name;
 
-        public ProcedureSources(string owner, string name, string[] additionalProcedureSourceProperties) : base(additionalProcedureSourceProperties)
+        public ProcedureSources(string owner, string name, string[] additionalProcedureSourcePropertyNames) : base(additionalProcedureSourcePropertyNames)
         {
             _name = name;
             Owner = owner;

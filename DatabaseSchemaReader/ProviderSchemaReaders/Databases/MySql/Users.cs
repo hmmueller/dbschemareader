@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
 {
     class Users : SqlExecuter<DatabaseUser>
     {
-        public Users(string[] additionalUserProperties) : base(additionalUserProperties)
+        public Users(string[] additionalUserPropertyNames) : base(additionalUserPropertyNames)
         {
             Sql = @"select User from mysql.user";
         }

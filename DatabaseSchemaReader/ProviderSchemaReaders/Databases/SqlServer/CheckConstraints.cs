@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _tableName;
 
-        public CheckConstraints(string owner, string tableName, string[] additionalCheckConstraintProperties) : base(additionalCheckConstraintProperties)
+        public CheckConstraints(string owner, string tableName, string[] additionalCheckConstraintPropertyNames) : base(additionalCheckConstraintPropertyNames)
         {
             _tableName = tableName;
             Owner = owner;

@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private SerializableAdditionalProperties _result;
 
-        public TopLevelProperties(string[] additionalTopLevelProperties) : base(additionalTopLevelProperties)
+        public TopLevelProperties(string[] additionalTopLevelPropertyNames) : base(additionalTopLevelPropertyNames)
         {
             Sql = @"SELECT 0 AS Dummy {0} FROM sys.databases ADDITIONAL_INFO WHERE name = db_name()";
         }
@@ -20,9 +20,9 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         protected override void Mapper(IDataRecord row)
         {
             _result = new SerializableAdditionalProperties();
-            if (_additionalProperties != null)
+            if (_additionalPropertyNames != null)
             {
-                foreach (var p in _additionalProperties)
+                foreach (var p in _additionalPropertyNames)
                 {
                     int ix = row.GetOrdinal(p);
                     _result.Add(p, row.IsDBNull(ix) ? null : row.GetValue(ix));
@@ -32,7 +32,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
 
         public SerializableAdditionalProperties Execute(DbConnection dbConnection)
         {
-            if (_additionalProperties != null)
+            if (_additionalPropertyNames != null)
                 ExecuteDbReader(dbConnection);
             return _result;
         }
