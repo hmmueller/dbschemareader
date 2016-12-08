@@ -23,9 +23,9 @@ where
  order by 
     v.TABLE_SCHEMA, v.TABLE_NAME";
 
-            AdditionalPropertiesJoin = string.Format(@"LEFT OUTER JOIN sys.views {0}  
-              ON v.TABLE_SCHEMA = schema_name({0}.schema_id) AND 
-                 v.TABLE_NAME = {0}.name", ADDITIONAL_INFO);
+            AdditionalPropertiesJoin = @"LEFT OUTER JOIN sys.views {ai}  
+              ON v.TABLE_SCHEMA = schema_name({ai}.schema_id) AND 
+                 v.TABLE_NAME = {ai}.name".Replace("{ai}", ADDITIONAL_INFO);
         }
 
         public IList<DatabaseView> Execute(DbConnection connection)
@@ -46,15 +46,15 @@ where
         {
             var schema = record["TABLE_SCHEMA"].ToString();
             var name = record["TABLE_NAME"].ToString();
-            var table = new DatabaseView
+            var view = new DatabaseView
                         {
                             Name = name,
                             SchemaOwner = schema
                         };
 
-            table.AddAdditionalProperties(record, _additionalPropertyNames);
+            view.AddAdditionalProperties(record, _additionalPropertyNames);
 
-            Result.Add(table);
+            Result.Add(view);
         }
     }
 }

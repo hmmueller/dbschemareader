@@ -24,9 +24,9 @@ where
  order by 
     t.TABLE_SCHEMA, t.TABLE_NAME";
 
-            AdditionalPropertiesJoin = string.Format(@"LEFT OUTER JOIN sys.tables {0}  
-              ON t.TABLE_SCHEMA = schema_name({0}.schema_id) AND 
-                 t.TABLE_NAME = {0}.name", ADDITIONAL_INFO);
+            AdditionalPropertiesJoin = @"LEFT OUTER JOIN sys.tables {ai}
+              ON t.TABLE_SCHEMA = schema_name({ai}.schema_id) AND 
+                 t.TABLE_NAME = {ai}.name".Replace("{ai}", ADDITIONAL_INFO);
         }
 
         public IList<DatabaseTable> Execute(DbConnection connection)

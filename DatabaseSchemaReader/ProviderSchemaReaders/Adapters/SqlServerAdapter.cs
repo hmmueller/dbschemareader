@@ -150,7 +150,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 
         public override IList<DatabaseIndex> Indexes(string tableName) 
             {
-            return new Indexes(Owner, tableName, AdditionalIndexProperties)
+            return new Indexes(Owner, tableName, AdditionalIndexProperties, AdditionalIndexColumnProperties)
                 .Execute(DbConnection);
         }
 

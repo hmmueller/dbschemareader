@@ -26,6 +26,7 @@ cons2.table_name AS fk_table,
 cons2.table_schema AS fk_schema,
 refs.delete_rule AS delete_rule,
 refs.update_rule AS update_rule
+{0}
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS cons
     INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS keycolumns
         ON (cons.constraint_catalog = keycolumns.constraint_catalog
@@ -43,6 +44,7 @@ FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS cons
             OR cons2.constraint_catalog IS NULL) AND
         cons2.constraint_schema = refs.unique_constraint_schema AND
         cons2.constraint_name = refs.unique_constraint_name
+    {1}
 WHERE 
     (keycolumns.table_name = @tableName OR @tableName IS NULL) AND 
     (cons.constraint_schema = @schemaOwner OR @schemaOwner IS NULL) AND 
@@ -50,6 +52,10 @@ WHERE
 ORDER BY
     cons.constraint_schema, keycolumns.table_name, cons.constraint_name, ordinal_position";
 
+            // Only FK additional properties are retrieved (not pk, others)
+            AdditionalPropertiesJoin = @"LEFT OUTER JOIN sys.foreign_keys {ai}  
+              ON refs.constraint_schema = schema_name({ai}.schema_id) AND 
+                 refs.constraint_name = {ai}.name".Replace("{ai}", ADDITIONAL_INFO);
         }
 
         protected override void AddParameters(DbCommand command)
@@ -102,6 +108,9 @@ ORDER BY
                 };
                 Result.Add(constraint);
             }
+
+            constraint.AddAdditionalProperties(record, _additionalPropertyNames);
+
             var columnName = record.GetString("column_name");
             constraint.Columns.Add(columnName);
         }

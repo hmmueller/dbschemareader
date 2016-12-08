@@ -19,6 +19,8 @@ namespace DatabaseSchemaReader.DataSchema {
 
         public void Add(string name, object value)
         {
+            // TODO: Remove existing name and value? - because some objects are "doubly filled", e.g. constraints (FindConstraint, then fill).
+
             _additionalPropertyNames.Add(name);
             _additionalPropertyValues.Add(value);
         }

@@ -17,9 +17,10 @@ SELECT Schema_name(schema_id) AS sequence_owner,
        start_value            AS min_value,
        increment              AS increment_by,
        is_cycling             AS cycle_flag
-FROM   sys.sequences
+       {0}
+FROM   sys.sequences {ai}
 WHERE  
-(Schema_name(schema_id) = @schemaOwner OR @schemaOwner IS NULL)";
+(Schema_name(schema_id) = @schemaOwner OR @schemaOwner IS NULL)".Replace("{ai}", ADDITIONAL_INFO);
 
         }
 
@@ -53,14 +54,17 @@ WHERE type= 'SO' AND
         {
             var owner = record.GetString("sequence_owner");
             var name = record.GetString("sequence_name");
-            var sproc = new DatabaseSequence
+            var seq = new DatabaseSequence
             {
                 SchemaOwner = owner,
                 Name = name,
                 MinimumValue = record.GetNullableInt("min_value"),
                 IncrementBy = record.GetNullableInt("increment_by").GetValueOrDefault(),
             };
-            Result.Add(sproc);
+
+            seq.AddAdditionalProperties(record, _additionalPropertyNames);
+
+            Result.Add(seq);
         }
     }
 }

@@ -18,23 +18,24 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
             Sql = @"SELECT
     SchemaName = SCHEMA_NAME(t.schema_id),
     TableName = t.name,
-    StatisticsName = st.name,
+    StatisticsName = {ai}.name,
     ColumnName = col.name
+    {0}
 FROM
-    sys.stats st
+    sys.stats {ai}
 INNER JOIN
-    sys.stats_columns stc ON st.object_id = stc.object_id and st.stats_id = stc.stats_id
+    sys.stats_columns stc ON {ai}.object_id = stc.object_id and {ai}.stats_id = stc.stats_id
 INNER JOIN 
     sys.columns col ON stc.object_id = col.object_id and stc.column_id = col.column_id 
 INNER JOIN 
-    sys.tables t ON st.object_id = t.object_id 
+    sys.tables t ON {ai}.object_id = t.object_id 
 WHERE 
     (t.name = @TableName OR @TableName IS NULL) AND 
     (SCHEMA_NAME(t.schema_id) = @schemaOwner OR @schemaOwner IS NULL) AND 
         t.is_ms_shipped = 0 
 ORDER BY 
-        t.name, st.name, col.name
-";
+        t.name, {ai}.name, col.name
+".Replace("{ai}", ADDITIONAL_INFO);
 
         }
 
@@ -58,6 +59,9 @@ ORDER BY
                     TableName = tableName,
                     Name = name,
                 };
+
+                statistics.AddAdditionalProperties(record, _additionalPropertyNames);
+
                 Result.Add(statistics);
             }
             var colName = record.GetString("ColumnName");

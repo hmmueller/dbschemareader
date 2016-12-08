@@ -17,20 +17,21 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     s.name AS SCHEMA_NAME, 
     o.name AS TABLE_NAME,
     c.name AS COLUMN_NAME,
-    d.name AS CONSTRAINT_NAME,
-    d.[definition] AS EXPRESSION
-FROM sys.[default_constraints] d
+    {ai}.name AS CONSTRAINT_NAME,
+    {ai}.[definition] AS EXPRESSION
+    {0}
+FROM sys.[default_constraints] {ai}
 INNER JOIN sys.objects o
-    ON o.object_id = d.parent_object_id
+    ON o.object_id = {ai}.parent_object_id
 INNER JOIN sys.columns c
-    ON c.default_object_id = d.object_id
+    ON c.default_object_id = {ai}.object_id
 INNER JOIN  sys.schemas s
     ON s.schema_id = o.schema_id
 WHERE 
     (o.name = @tableName OR @tableName IS NULL) AND 
     (s.name = @schemaOwner OR @schemaOwner IS NULL) AND 
 o.type= 'U' 
-ORDER BY s.name, o.name";
+ORDER BY s.name, o.name, c.name, {ai}.name".Replace("{ai}", ADDITIONAL_INFO);
 
         }
 
@@ -51,7 +52,7 @@ ORDER BY s.name, o.name";
             var tableName = record.GetString("TABLE_NAME");
             var name = record.GetString("CONSTRAINT_NAME");
 
-            var constraint = FindConstraint(name, tableName, schema);
+            DatabaseConstraint constraint = FindConstraint(name, tableName, schema);
             if (constraint == null)
             {
                 constraint = new DatabaseConstraint
@@ -62,8 +63,11 @@ ORDER BY s.name, o.name";
                     Name = name,
                     Expression = record.GetString("EXPRESSION"),
                 };
-            Result.Add(constraint);
+                Result.Add(constraint);
             }
+
+            constraint.AddAdditionalProperties(record, _additionalPropertyNames);
+
             var columnName = record.GetString("COLUMN_NAME");
             constraint.Columns.Add(columnName);
         }

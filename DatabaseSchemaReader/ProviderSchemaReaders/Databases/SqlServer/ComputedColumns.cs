@@ -16,16 +16,18 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
             Sql = @"SELECT 
 SchemaOwner = s.name, 
 TableName = o.name, 
-ColumnName = c.name,
-ComputedDefinition = c.definition
-FROM sys.computed_columns c
-INNER JOIN sys.all_objects o ON c.object_id = o.object_id
+ColumnName = {ai}.name,
+ComputedDefinition = {ai}.definition
+{0}
+FROM sys.computed_columns {ai}
+INNER JOIN sys.all_objects o ON {ai}.object_id = o.object_id
 INNER JOIN sys.schemas s ON s.schema_id = o.schema_id
 WHERE 
 (o.name = @tableName OR @tableName IS NULL) AND 
 (s.name = @schemaOwner OR @schemaOwner IS NULL) AND 
 o.type= 'U' 
-ORDER BY o.name, c.name";
+ORDER BY o.name, {ai}.name".Replace("{ai}", ADDITIONAL_INFO);
+
         }
 
         public IList<DatabaseColumn> Execute(DbConnection connection)
@@ -46,7 +48,7 @@ ORDER BY o.name, c.name";
             var tableName = record.GetString("TableName");
             var columnName = record.GetString("ColumnName");
             var computed = record.GetString("ComputedDefinition");
-            var table = new DatabaseColumn
+            var column = new DatabaseColumn
             {
                 SchemaOwner = schema,
                 TableName = tableName,
@@ -54,7 +56,9 @@ ORDER BY o.name, c.name";
                 ComputedDefinition = computed,
             };
 
-            Result.Add(table);
+            column.AddAdditionalProperties(record, _additionalPropertyNames);
+
+            Result.Add(column);
         }
     }
 }
