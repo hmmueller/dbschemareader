@@ -12,10 +12,15 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _tableName;
         private readonly string[] _additionalIndexColumnProperties;
 
-        public Indexes(string owner, string tableName, string[] additionalIndexPropertyNames, string[] additionalIndexColumnProperties) : base(additionalIndexPropertyNames)
+        public Indexes(string owner, string tableName, string[] additionalIndexPropertyNames, string[] additionalIndexColumnProperties) 
+            : base(
+                  additionalIndexPropertyNames == null ? additionalIndexColumnProperties
+                  : additionalIndexColumnProperties == null ? additionalIndexPropertyNames
+                  : additionalIndexPropertyNames.Concat(additionalIndexColumnProperties).ToArray())
         {
-            _tableName = tableName;
             _additionalIndexColumnProperties = additionalIndexColumnProperties;
+
+            _tableName = tableName;
             Owner = owner;
             Sql = @" SELECT 
      SchemaName = SCHEMA_NAME(t.schema_id),

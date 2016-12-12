@@ -398,11 +398,9 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
                     // "system_type_id", "user_type_id", "xml_collection_id"
                 },
                 AdditionalIndexColumnPropertyNames = new string[] {
-                    // TODO: Does not work :_( - needed for is_included_column!!!!
-
                     // retrieved from sys.index_columns
-                    //"is_descending_key", "is_included_column",                    
-                    //"key_ordinal",
+                    "is_descending_key", "is_included_column",
+                    "key_ordinal",
 
                     // not retrieved from sys.index_columns
                     // "column_id", "data_space_id", "index_column_id", "index_id", "object_id",

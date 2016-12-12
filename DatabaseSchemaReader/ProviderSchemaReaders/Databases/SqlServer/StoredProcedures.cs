@@ -15,8 +15,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
             Owner = owner;
             Sql = @"SELECT
   SPECIFIC_SCHEMA,
-  SPECIFIC_NAME,
-  ROUTINE_DEFINITION
+  SPECIFIC_NAME
   {0}
 FROM INFORMATION_SCHEMA.ROUTINES {ai}
 WHERE 
@@ -55,12 +54,10 @@ ORDER BY SPECIFIC_SCHEMA, SPECIFIC_NAME".Replace("{ai}", ADDITIONAL_INFO);
         {
             var owner = record.GetString("SPECIFIC_SCHEMA");
             var name = record.GetString("SPECIFIC_NAME");
-            var sql = record.GetString("ROUTINE_DEFINITION");
             var sproc = new DatabaseStoredProcedure
             {
                 SchemaOwner = owner,
                 Name = name,
-                Sql = sql
             };
 
             sproc.AddAdditionalProperties(record, _additionalPropertyNames);

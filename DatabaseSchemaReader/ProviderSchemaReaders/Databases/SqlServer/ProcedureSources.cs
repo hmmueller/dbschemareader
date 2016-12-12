@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using DatabaseSchemaReader.ProviderSchemaReaders.ResultModels;
 
 namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
@@ -73,7 +74,11 @@ ORDER BY o.type;";
                     source.SourceType = SourceType.View;
                     break;
             }
-            source.Text = record.GetString("Text");
+            source.Text = SymbolParser.SkipSymbolsUntil(record.GetString("Text"),
+                new Regex("^@"), // a parameter
+                new Regex("^as$", RegexOptions.IgnoreCase), // "AS" of parameterless procedure or view
+                new Regex("^returns$", RegexOptions.IgnoreCase) // "AS" of parameterless function
+            );
             Result.Add(source);
         }
     }
