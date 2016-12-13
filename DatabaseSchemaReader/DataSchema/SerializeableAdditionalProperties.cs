@@ -31,6 +31,8 @@ namespace DatabaseSchemaReader.DataSchema {
             return ix < 0 ? null : _additionalPropertyValues[ix];
         }
 
-        public IEnumerable<string> AllNames => _additionalPropertyNames;
+        public List<string> AllNames => _additionalPropertyNames;
+
+        public List<object> AllValues => _additionalPropertyValues;
     }
 }

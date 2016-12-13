@@ -182,6 +182,14 @@ namespace DatabaseSchemaReader.DataSchema
         public bool IsIndexed { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the index column is included only a leaf level (DB2, SqlServer and Sybase can do this).
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this column is only included at leaf level; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsIncludeColumnInIndex { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is part of the primary key.
         /// </summary>
         /// <value>

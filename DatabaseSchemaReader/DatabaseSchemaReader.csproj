@@ -291,7 +291,6 @@
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Statistics.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\Indexes.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ProcedureArguments.cs" />
-    <Compile Include="ProviderSchemaReaders\Databases\SqlServer\SymbolParser.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\TopLevelProperties.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ViewSources.cs" />
     <Compile Include="ProviderSchemaReaders\Databases\SqlServer\ProcedureSources.cs" />

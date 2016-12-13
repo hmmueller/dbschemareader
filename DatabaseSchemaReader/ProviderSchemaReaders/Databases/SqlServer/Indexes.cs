@@ -29,7 +29,8 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
      ColumnName = col.name,
      INDEX_TYPE = {ai}.type_desc,
      IsPrimary = is_primary_key,
-     IsUnique = is_unique_constraint
+     IsUnique = is_unique_constraint,
+     IsIncluded = is_included_column
 	 {0}
 FROM 
      (select ind.*, ic.index_column_id, column_id, key_ordinal, partition_ordinal, is_descending_key, is_included_column from sys.indexes ind 
@@ -80,11 +81,13 @@ ORDER BY
                 Result.Add(index);
             }
             var colName = record.GetString("ColumnName");
+            var isIncluded = record.GetBoolean("IsIncluded");
             if (string.IsNullOrEmpty(colName)) return;
 
             var col = new DatabaseColumn
             {
                 Name = colName,
+                IsIncludeColumnInIndex = isIncluded
             };
 
             col.AddAdditionalProperties(record, _additionalIndexColumnProperties);
