@@ -245,8 +245,8 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             //assert
             var table = schema.FindTableByName(tableName);
-            Assert.IsTrue(table.Columns.All(c => c.GetAdditionalProperty(isSparseProperty) != null));
-            Assert.IsTrue(table.Columns.Where(c => c.DbDataType.ToUpperInvariant().Contains("CHAR")).All(c => c.GetAdditionalProperty(collationProperty) != null));
+            Assert.IsTrue(table.Columns.All(c => c.AdditionalProperties.Get(isSparseProperty) != null));
+            Assert.IsTrue(table.Columns.Where(c => c.DbDataType.ToUpperInvariant().Contains("CHAR")).All(c => c.AdditionalProperties.Get(collationProperty) != null));
         }
 
         [TestMethod, TestCategory("SqlServer")]

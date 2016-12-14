@@ -39,7 +39,7 @@ namespace DatabaseSchemaReaderTest.DataSchema
                 clone = (DatabaseSchema)f.Deserialize(stm);
             }
 
-            Assert.AreEqual(schema.TopLevelProperties.AllNames.Count(), clone.TopLevelProperties.AllNames.Count());
+            Assert.AreEqual(schema.TopLevelProperties.AllNames.Count, clone.TopLevelProperties.AllNames.Count);
             Assert.AreEqual(schema.DataTypes.Count, clone.DataTypes.Count);
             Assert.AreEqual(schema.StoredProcedures.Count, clone.StoredProcedures.Count);
             Assert.AreEqual(schema.Tables.Count, clone.Tables.Count);
@@ -52,7 +52,9 @@ namespace DatabaseSchemaReaderTest.DataSchema
         {
             var dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
             {
-                AdditionalTopLevelPropertyNames = new [] { "collation_name"}
+                AdditionalTopLevelPropertyNames = new [] { "collation_name" },
+                AdditionalTablePropertyNames = new [] { "uses_ansi_nulls" },
+                AdditionalColumnPropertyNames = new[] { "collation_name" }
             });
             var schema = dbReader.ReadAll();
 
@@ -70,11 +72,13 @@ namespace DatabaseSchemaReaderTest.DataSchema
 
             //the clone has lost some useful cross linking.
 
-            Assert.AreEqual(schema.TopLevelProperties.AllNames.Count(), clone.TopLevelProperties.AllNames.Count());
+            Assert.AreEqual(schema.TopLevelProperties.AllNames.Count, clone.TopLevelProperties.AllNames.Count);
             Assert.AreEqual(schema.DataTypes.Count, clone.DataTypes.Count);
             Assert.AreEqual(schema.StoredProcedures.Count, clone.StoredProcedures.Count);
             Assert.AreEqual(schema.Tables.Count, clone.Tables.Count);
             Assert.AreEqual(schema.Tables[0].Columns.Count, clone.Tables[0].Columns.Count);
+            Assert.AreEqual(schema.Tables[0].AdditionalProperties.AllNames.Count, clone.Tables[0].AdditionalProperties.AllNames.Count);
+            Assert.AreEqual(schema.Tables[0].Columns[0].AdditionalProperties.AllNames.Count, clone.Tables[0].Columns[0].AdditionalProperties.AllNames.Count);
         }
 
         [TestMethod]
