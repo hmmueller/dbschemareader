@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DatabaseSchemaReader.DataSchema {
     [Serializable]
@@ -11,24 +12,32 @@ namespace DatabaseSchemaReader.DataSchema {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<object> _additionalPropertyValues;
 
-        internal SerializableAdditionalProperties()
-        {
+        private Dictionary<string, object> _cache;
+
+        internal SerializableAdditionalProperties() {
             _additionalPropertyNames = new List<string>();
             _additionalPropertyValues = new List<object>();
         }
 
-        public void Add(string name, object value)
-        {
+        public void Add(string name, object value) {
             // TODO: Remove existing name and value? - because some objects are "doubly filled", e.g. constraints (FindConstraint, then fill).
 
             _additionalPropertyNames.Add(name);
             _additionalPropertyValues.Add(value);
+            _cache = null;
         }
 
-        public object Get(string name)
-        {
-            int ix = _additionalPropertyNames.FindIndex(s => s == name);
-            return ix < 0 ? null : _additionalPropertyValues[ix];
+        public object Get(string name) {
+            if (_cache == null) {
+                _cache = _additionalPropertyNames
+                    .Select((n, ix) => new {
+                        Name = n, Ix = ix
+                    })
+                    .ToDictionary(nix => nix.Name, nix => _additionalPropertyValues[nix.Ix]);
+            }
+            object value;
+            _cache.TryGetValue(name, out value);
+            return value;
         }
 
         public List<string> AllNames => _additionalPropertyNames;
