@@ -9,8 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
     {
         private readonly string _name;
 
-        public Functions(string name)
-        {
+        public Functions(string name, string[] additionalPropertyNames) : base(additionalPropertyNames) {
             _name = name;
             Sql = @"SELECT
 rdb$function_name AS FUNCTION_NAME,

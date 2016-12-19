@@ -11,8 +11,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
     {
         private readonly string _tableName;
 
-        public Indexes(string owner, string tableName)
-        {
+        public Indexes(string owner, string tableName, string[] additionalPropertyNames) : base(additionalPropertyNames) {
             _tableName = tableName;
             Owner = owner;
             Sql = @" SELECT 
