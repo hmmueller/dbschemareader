@@ -25,13 +25,16 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
   OBJECTPROPERTY(so.id, 'ExecIsInsteadOfTrigger') AS IS_INSTEADOF,
   OBJECTPROPERTY(so.id, 'ExecIsTriggerDisabled') AS IS_DISABLED,
   OBJECT_DEFINITION(so.id) AS TRIGGER_BODY
+  {0}
 FROM sysobjects AS so
 INNER JOIN sysobjects AS parent
   ON so.parent_obj = parent.Id
+  {1}
 WHERE so.type = 'TR'
     AND (USER_NAME(parent.uid) = @Owner or (@Owner is null)) 
     AND (OBJECT_NAME(so.parent_obj) = @TABLE_NAME or (@TABLE_NAME is null)) 
 ";
+            AdditionalPropertiesJoin = "LEFT OUTER JOIN sys.triggers {ai} ON so.id = {ai}.object_id".Replace("{ai}", ADDITIONAL_INFO);
 
         }
 

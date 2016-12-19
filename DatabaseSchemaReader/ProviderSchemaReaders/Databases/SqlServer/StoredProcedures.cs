@@ -16,24 +16,25 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
             Sql = @"SELECT
   SPECIFIC_SCHEMA,
   SPECIFIC_NAME
-FROM INFORMATION_SCHEMA.ROUTINES
+  {0}
+FROM INFORMATION_SCHEMA.ROUTINES {ai}
 WHERE 
     (SPECIFIC_SCHEMA = @Owner OR (@Owner IS NULL))
     AND (SPECIFIC_NAME = @Name OR (@Name IS NULL))
     AND (ROUTINE_TYPE = 'PROCEDURE')
-    AND ObjectProperty (Object_Id (INFORMATION_SCHEMA.ROUTINES.ROUTINE_NAME), 'IsMSShipped') = 0 and
+    AND ObjectProperty (Object_Id ({ai}.ROUTINE_NAME), 'IsMSShipped') = 0 and
         (
             select 
                 major_id 
             from 
                 sys.extended_properties 
             where 
-                major_id = object_id(INFORMATION_SCHEMA.ROUTINES.ROUTINE_NAME) and 
+                major_id = object_id({ai}.ROUTINE_NAME) and 
                 minor_id = 0 and 
                 class = 1 and 
                 name = N'microsoft_database_tools_support'
         ) is null
-ORDER BY SPECIFIC_SCHEMA, SPECIFIC_NAME";
+ORDER BY SPECIFIC_SCHEMA, SPECIFIC_NAME".Replace("{ai}", ADDITIONAL_INFO);
 
         }
 
@@ -58,6 +59,9 @@ ORDER BY SPECIFIC_SCHEMA, SPECIFIC_NAME";
                 SchemaOwner = owner,
                 Name = name,
             };
+
+            sproc.AddAdditionalProperties(record, _additionalPropertyNames);
+
             Result.Add(sproc);
         }
     }

@@ -88,21 +88,11 @@ namespace DatabaseSchemaReader.DataSchema
             return Name.GetHashCode();
         }
 
-        private SerializableAdditionalProperties _additionalProperties;
+        public SerializableAdditionalProperties AdditionalProperties { get; set; }
 
         protected NamedObject()
         {
-            _additionalProperties = new SerializableAdditionalProperties();
-        }
-
-        public object GetAdditionalProperty(string name)
-        {
-            return _additionalProperties.Get(name);
-        }
-
-        public IEnumerable<string> GetAdditionalPropertyNames()
-        {
-            return _additionalProperties.AllNames;
+            AdditionalProperties = new SerializableAdditionalProperties();
         }
 
         public void AddAdditionalProperties(IDataRecord record, string[] additionalPropertyNames)
@@ -110,7 +100,7 @@ namespace DatabaseSchemaReader.DataSchema
             foreach (var s in additionalPropertyNames ?? Enumerable.Empty<string>())
             {
                 int ix = record.GetOrdinal(s);
-                _additionalProperties.Add(s, record.IsDBNull(ix) ? null : record.GetValue(ix));
+                AdditionalProperties.Add(s, record.IsDBNull(ix) ? null : record.GetValue(ix));
             }
         }
 

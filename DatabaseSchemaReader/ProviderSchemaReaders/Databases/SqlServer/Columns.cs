@@ -40,12 +40,12 @@ where
  order by 
     c.TABLE_SCHEMA, c.TABLE_NAME, ORDINAL_POSITION";
 
-            AdditionalPropertiesJoin = string.Format(@"LEFT OUTER JOIN sys.tables syst 
+            AdditionalPropertiesJoin = @"LEFT OUTER JOIN sys.tables syst 
               ON c.TABLE_SCHEMA = schema_name(syst.schema_id) AND 
                  c.TABLE_NAME = syst.name
-           LEFT OUTER JOIN sys.columns {0} ON 
-                 syst.object_id = {0}.object_id AND
-                 c.COLUMN_NAME = {0}.Name", ADDITIONAL_INFO);
+           LEFT OUTER JOIN sys.columns {ai} ON 
+                 syst.object_id = {ai}.object_id AND
+                 c.COLUMN_NAME = {ai}.Name".Replace("{ai}", ADDITIONAL_INFO);
 
             var keyMap = new ColumnsKeyMap();
             _converter = new ColumnRowConverter(keyMap);

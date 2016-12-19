@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         public Users(string[] additionalUserPropertyNames) : base(additionalUserPropertyNames)
         {
-            Sql = @"select name from sysusers";
+            Sql = @"select name {0} from sysusers {ai}".Replace("{ai}", ADDITIONAL_INFO);
         }
 
         protected override void AddParameters(DbCommand command)
@@ -19,11 +19,14 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         protected override void Mapper(IDataRecord record)
         {
             var name = record.GetString("name");
-            var constraint = new DatabaseUser
+            var user = new DatabaseUser
             {
                 Name = name,
             };
-            Result.Add(constraint);
+
+            user.AddAdditionalProperties(record, _additionalPropertyNames);
+
+            Result.Add(user);
         }
 
         public IList<DatabaseUser> Execute(DbConnection dbConnection)

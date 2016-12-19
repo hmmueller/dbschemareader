@@ -16,17 +16,18 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
             Sql = @"SELECT 
 SchemaOwner = s.name, 
 TableName = o.name, 
-ColumnName = c.name,
+ColumnName = {ai}.name,
 IdentitySeed = seed_value,
 IdentityIncrement = increment_value
-FROM sys.identity_columns c
-INNER JOIN sys.all_objects o ON c.object_id = o.object_id
+{0}
+FROM sys.identity_columns {ai}
+INNER JOIN sys.all_objects o ON {ai}.object_id = o.object_id
 INNER JOIN sys.schemas s ON s.schema_id = o.schema_id
 WHERE 
 (o.name = @TableName OR @TableName IS NULL) AND 
 (s.name = @schemaOwner OR @schemaOwner IS NULL) AND 
 o.type= 'U' 
-ORDER BY o.name, c.name";
+ORDER BY o.name, {ai}.name".Replace("{ai}", ADDITIONAL_INFO);
         }
 
         public IList<DatabaseColumn> Execute(DbConnection connection)
@@ -54,8 +55,10 @@ ORDER BY o.name, c.name";
                 TableName = tableName,
                 Name = columnName,
                 IsAutoNumber = true,
-                IdentityDefinition = new DatabaseColumnIdentity { IdentityIncrement = increment, IdentitySeed = seed},
+                IdentityDefinition = new DatabaseColumnIdentity { IdentityIncrement = increment, IdentitySeed = seed },
             };
+
+            column.AddAdditionalProperties(record, _additionalPropertyNames);
 
             Result.Add(column);
         }

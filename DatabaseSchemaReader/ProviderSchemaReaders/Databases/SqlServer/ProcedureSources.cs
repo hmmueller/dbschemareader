@@ -73,7 +73,7 @@ ORDER BY o.type;";
                     source.SourceType = SourceType.View;
                     break;
             }
-            source.Text = record.GetString("Text");
+            source.Text = record.GetString("Text").Trim();
             Result.Add(source);
         }
     }

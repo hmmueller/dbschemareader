@@ -137,7 +137,10 @@ namespace DatabaseSchemaReader.DataSchema
         /// </value>
         public string Owner { get; set; }
 
-        public SerializableAdditionalProperties TopLevelProperties { get { return _topLevelProperties; } }
+        public SerializableAdditionalProperties TopLevelProperties {
+            get { return _topLevelProperties; }
+            set { _topLevelProperties = value; }
+        }
 
         public void ReplaceTopLevelProperties(SerializableAdditionalProperties topLevelProperties)
         {
