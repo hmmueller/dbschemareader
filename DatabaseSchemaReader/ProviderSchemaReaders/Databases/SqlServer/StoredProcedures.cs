@@ -22,9 +22,8 @@ WHERE
     (SPECIFIC_SCHEMA = @Owner OR (@Owner IS NULL))
     AND (SPECIFIC_NAME = @Name OR (@Name IS NULL))
     AND (ROUTINE_TYPE = 'PROCEDURE')
-    AND ObjectProperty (Object_Id ({ai}.ROUTINE_NAME), 'IsMSShipped') = 0 and
-        (
-            select 
+    AND ISNULL(ObjectProperty (Object_Id ({ai}.ROUTINE_NAME), 'IsMSShipped'), 0) = 0
+    AND (   select 
                 major_id 
             from 
                 sys.extended_properties 

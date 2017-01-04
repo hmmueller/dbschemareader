@@ -4,18 +4,15 @@ using DatabaseSchemaReader;
 using DatabaseSchemaReader.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DatabaseSchemaReaderTest.IntegrationTests
-{
+namespace DatabaseSchemaReaderTest.IntegrationTests {
     /// <summary>
     /// Summary description for SqlServerNorthwind
     /// </summary>
     [TestClass]
-    public class SqlServerNorthwind
-    {
+    public class SqlServerNorthwind {
 
         [TestMethod, TestCategory("SqlServer.Odbc")]
-        public void ReadNorthwindUsingOdbc()
-        {
+        public void ReadNorthwindUsingOdbc() {
             //you'll get much more information from System.Data.SqlClient
             const string providername = "System.Data.Odbc";
             const string connectionString = @"Driver={SQL Server};Server=.\SQLEXPRESS;Database=Northwind;Trusted_Connection=Yes;";
@@ -31,14 +28,12 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindProducts()
-        {
+        public void ReadNorthwindProducts() {
             var dbReader = TestHelper.GetNorthwindReader();
             var table = dbReader.Table("Products");
             Debug.WriteLine("Table " + table.Name);
 
-            foreach (var column in table.Columns)
-            {
+            foreach (var column in table.Columns) {
                 //because we loaded only a single table
                 //relations aren't available here (to datatypes/foreign key tables)
                 Debug.Write("\tColumn " + column.Name + "\t" + column.DbDataType);
@@ -64,16 +59,13 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindAllTables()
-        {
+        public void ReadNorthwindAllTables() {
             var dbReader = TestHelper.GetNorthwindReader();
             var tables = dbReader.AllTables();
-            foreach (var table in tables)
-            {
+            foreach (var table in tables) {
                 Debug.WriteLine("Table " + table.Name);
 
-                foreach (var column in table.Columns)
-                {
+                foreach (var column in table.Columns) {
                     //because we loaded only tables
                     //relations to datatypes aren't available here
                     //but foreign key tables are linked up
@@ -101,17 +93,14 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwind()
-        {
+        public void ReadNorthwind() {
             var dbReader = TestHelper.GetNorthwindReader();
             var schema = dbReader.ReadAll();
 
-            foreach (var table in schema.Tables)
-            {
+            foreach (var table in schema.Tables) {
                 Debug.WriteLine("Table " + table.Name);
 
-                foreach (var column in table.Columns)
-                {
+                foreach (var column in table.Columns) {
                     Debug.Write("\tColumn " + column.Name + "\t" + column.DataType.TypeName);
                     if (column.DataType.IsString)
                         Debug.Write("(" + column.Length + ")");
@@ -136,12 +125,10 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindViews()
-        {
+        public void ReadNorthwindViews() {
             var dbReader = TestHelper.GetNorthwindReader();
             var schema = dbReader.ReadAll();
-            foreach (var view in schema.Views)
-            {
+            foreach (var view in schema.Views) {
                 var sql = view.Sql;
                 Assert.IsNotNull(sql, "ProcedureSource should also fill in the view source");
             }
@@ -149,15 +136,13 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindProductsWithCodeGen()
-        {
+        public void ReadNorthwindProductsWithCodeGen() {
             var dbReader = TestHelper.GetNorthwindReader();
             dbReader.DataTypes(); //load the datatypes
             var table = dbReader.Table("Products");
             Debug.WriteLine("Table " + table.Name);
 
-            foreach (var column in table.Columns)
-            {
+            foreach (var column in table.Columns) {
                 //Cs properties (the column name could be made .Net friendly too)
                 Debug.WriteLine("\tpublic " + column.DataType.NetCodeName(column) + " " + column.Name + " { get; set; }");
             }
@@ -190,8 +175,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindWithFilters()
-        {
+        public void ReadNorthwindWithFilters() {
             //arrange
             const string category = "Categories";
             const string alphaList = "Alphabetical list of products";
@@ -214,8 +198,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void DublicatedArgumentsDemo()
-        {
+        public void DublicatedArgumentsDemo() {
             var dbReader = TestHelper.GetNorthwindReader();
             var procedures = dbReader.AllStoredProcedures();
 
@@ -229,8 +212,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindWithAdditionalColumnProperties()
-        {
+        public void ReadNorthwindWithAdditionalColumnProperties() {
             //arrange
             const string tableName = "Categories";
             var isSparseProperty = "is_sparse";
@@ -250,8 +232,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindWithAdditionalDatabaseProperties()
-        {
+        public void ReadNorthwindWithAdditionalDatabaseProperties() {
             //arrange
             var collationProperty = "collation_name";
             DatabaseReader dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
@@ -267,8 +248,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         }
 
         [TestMethod, TestCategory("SqlServer")]
-        public void ReadNorthwindWithManyAdditionalProperties()
-        {
+        public void ReadNorthwindWithManyAdditionalProperties() {
             //arrange
             DatabaseReader dbReader = TestHelper.GetNorthwindReader(new AdditionalProperties
             {
@@ -397,7 +377,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
                     // "column_id", "default_object_id", "object_id", "rule_object_id",
                     // "system_type_id", "user_type_id", "xml_collection_id"
                 },
-                AdditionalIndexColumnPropertyNames = new string[] {
+                AdditionalIndexColumnPropertyNames = new[] {
                     // retrieved from sys.index_columns
                     "is_descending_key", "is_included_column",
                     "key_ordinal",
