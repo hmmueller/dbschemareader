@@ -59,7 +59,7 @@ namespace DatabaseSchemaReader.Compare
                 //a sanitized comparison
                 if (_writer.CompareView(view.Sql, match.Sql)) continue;
 
-                //in Oracle could be a CREATE OR REPLACE
+                //in Oracle could be a CREATE OR REPLACE; In SQL Server an ALTER
                 var script = "-- ALTER VIEW " + view.Name + Environment.NewLine +
                     _writer.DropView(view) + Environment.NewLine +
                     _writer.AddView(match);

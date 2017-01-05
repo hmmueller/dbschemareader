@@ -147,6 +147,9 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
                             x.PackageName == func.Package);
                 func.Arguments.Clear();
                 func.Arguments.AddRange(funcArgs);
+                
+                //return types are assigned as arguments (in most platforms). Move them to return type.
+                func.CheckArgumentsForReturnType();
             }
         }
 
