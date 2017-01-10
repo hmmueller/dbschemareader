@@ -14,27 +14,27 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
             Owner = owner;
 
             Sql = @"SELECT
-  so.name AS TRIGGER_NAME,
-  USER_NAME(so.uid) AS TRIGGER_SCHEMA,
-  USER_NAME(parent.uid) AS TABLE_SCHEMA,
-  OBJECT_NAME(so.parent_obj) AS TABLE_NAME,
-  OBJECTPROPERTY(so.id, 'ExecIsUpdateTrigger') AS IS_UPDATE,
-  OBJECTPROPERTY(so.id, 'ExecIsDeleteTrigger') AS IS_DELETE,
-  OBJECTPROPERTY(so.id, 'ExecIsInsertTrigger') AS IS_INSERT,
-  OBJECTPROPERTY(so.id, 'ExecIsAfterTrigger') AS IS_AFTER,
-  OBJECTPROPERTY(so.id, 'ExecIsInsteadOfTrigger') AS IS_INSTEADOF,
-  OBJECTPROPERTY(so.id, 'ExecIsTriggerDisabled') AS IS_DISABLED,
-  OBJECT_DEFINITION(so.id) AS TRIGGER_BODY
+  {ai}.name AS TRIGGER_NAME,
+  SCHEMA_NAME(parent.schema_id) AS TRIGGER_SCHEMA,
+  SCHEMA_NAME(parent.schema_id) AS TABLE_SCHEMA,
+  parent.name AS TABLE_NAME,
+  OBJECTPROPERTY({ai}.object_id, 'ExecIsUpdateTrigger') AS IS_UPDATE,
+  OBJECTPROPERTY({ai}.object_id, 'ExecIsDeleteTrigger') AS IS_DELETE,
+  OBJECTPROPERTY({ai}.object_id, 'ExecIsInsertTrigger') AS IS_INSERT,
+  OBJECTPROPERTY({ai}.object_id, 'ExecIsAfterTrigger') AS IS_AFTER,
+  {ai}.is_instead_of_trigger AS IS_INSTEADOF,
+  {ai}.is_disabled AS IS_DISABLED,
+  OBJECT_DEFINITION({ai}.object_id) AS TRIGGER_BODY
   {0}
-FROM sysobjects AS so
-INNER JOIN sysobjects AS parent
-  ON so.parent_obj = parent.Id
+FROM sys.triggers AS {ai}
+INNER JOIN sys.tables AS parent
+  ON {ai}.parent_id = parent.object_id
   {1}
-WHERE so.type = 'TR'
-    AND (USER_NAME(parent.uid) = @Owner or (@Owner is null)) 
-    AND (OBJECT_NAME(so.parent_obj) = @TABLE_NAME or (@TABLE_NAME is null)) 
-";
-            AdditionalPropertiesJoin = "LEFT OUTER JOIN sys.triggers {ai} ON so.id = {ai}.object_id".Replace("{ai}", ADDITIONAL_INFO);
+WHERE (SCHEMA_NAME(parent.schema_id) = @Owner or (@Owner is null)) 
+  AND (parent.name = @TABLE_NAME or (@TABLE_NAME is null)) 
+".Replace("{ai}", ADDITIONAL_INFO)
+;
+            AdditionalPropertiesJoin = "";
 
         }
 
