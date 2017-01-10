@@ -368,12 +368,17 @@ namespace DatabaseSchemaReader.SqlGen
             //we could plug in "CLUSTERED" or "PRIMARY XML" from index.IndexType here
             var indexType = index.IsUnique ? "UNIQUE " : string.Empty;
 
+            IEnumerable<DatabaseColumn> includeColumns = index.Columns.Where(c => c.IsIncludeColumnInIndex);
+
             return string.Format(CultureInfo.InvariantCulture,
                 "CREATE {0}INDEX {1} ON {2}({3})",
                 indexType, //must have trailing space
                 Escape(index.Name),
                 TableName(databaseTable),
-                GetColumnList(index.Columns.Select(i => i.Name))) + LineEnding();
+                GetColumnList(index.Columns.Where(c => !c.IsIncludeColumnInIndex).Select(i => i.Name))) + 
+                // Uses SQL SERVER syntax for include columns; if this is not general enough, move this to SqlServerMigrationGenerator and generalize here.
+                (includeColumns.Any() ? " INCLUDE (" + GetColumnList(includeColumns.Select(i => i.Name)) + ")" : "") 
+                + LineEnding();
         }
 
         public string AddStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics) {
