@@ -24,6 +24,14 @@ namespace DatabaseSchemaReader.DataSchema
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool? _isDateTime;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? _isBinary;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? _isBool;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? _isTimeSpan;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool? _isGuid;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _netDataTypeCSharpName;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly string _netDataType;
@@ -299,6 +307,63 @@ namespace DatabaseSchemaReader.DataSchema
                 return _isNumeric.Value;
             }
         }
+
+        /// <summary>
+        /// Returns if this is a byte[]
+        /// </summary>
+        public bool IsBinary {
+            get {
+                if (_isBinary.HasValue)
+                    return _isBinary.Value;
+                if (string.IsNullOrEmpty(NetDataType))
+                    return false;
+                _isBinary = (Type.GetType(NetDataType) == typeof(byte[]));
+                return _isBinary.Value;
+            }
+        }
+
+        /// <summary>
+        /// Returns if this is a bool
+        /// </summary>
+        public bool IsBool {
+            get {
+                if (_isBool.HasValue)
+                    return _isBool.Value;
+                if (string.IsNullOrEmpty(NetDataType))
+                    return false;
+                _isBool = (Type.GetType(NetDataType) == typeof(bool));
+                return _isBool.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is a timespan.
+        /// </summary>
+        public bool IsTimeSpan {
+            get {
+                if (_isTimeSpan.HasValue)
+                    return _isTimeSpan.Value;
+                if (string.IsNullOrEmpty(NetDataType))
+                    return false;
+                _isTimeSpan = (Type.GetType(NetDataType) == typeof(TimeSpan));
+                return _isTimeSpan.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is a Guid.
+        /// </summary>
+        public bool IsGuid {
+            get {
+                if (_isGuid.HasValue)
+                    return _isGuid.Value;
+                if (string.IsNullOrEmpty(NetDataType))
+                    return false;
+                _isGuid = (Type.GetType(NetDataType) == typeof(Guid));
+                return _isGuid.Value;
+            }
+        }
+
 
         ///<summary>
         ///The provider-specific type value that should be used when specifying a parameter’s type. For example, SqlDbType.Money or OracleType.Blob.

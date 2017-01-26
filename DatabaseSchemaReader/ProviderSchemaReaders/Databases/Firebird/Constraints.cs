@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
         private readonly string _tableName;
         private readonly ConstraintType _constraintType;
 
-        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalPropertyNames) : base(additionalPropertyNames) {
+        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) {
             _tableName = tableName;
             _constraintType = constraintType;
             Owner = owner;

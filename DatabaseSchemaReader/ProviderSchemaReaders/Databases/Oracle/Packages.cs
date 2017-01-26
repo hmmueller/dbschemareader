@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _name;
 
-        public Packages(string owner, string name, string[] additionalPackagePropertyNames) : base(additionalPackagePropertyNames)
+        public Packages(string owner, string name, string[] additionalPackagePropertyNames, int? commandTimeout) : base(additionalPackagePropertyNames, commandTimeout)
         {
             _name = name;
             Owner = owner;

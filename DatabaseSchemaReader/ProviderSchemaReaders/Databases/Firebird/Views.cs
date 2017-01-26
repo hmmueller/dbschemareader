@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
     {
         private readonly string _viewName;
 
-        public Views(string owner, string viewName, string[] additionalPropertyNames) : base(additionalPropertyNames) 
+        public Views(string owner, string viewName, string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) 
         {
             _viewName = viewName;
             Owner = owner;

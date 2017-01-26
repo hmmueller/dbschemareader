@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _tableName;
 
-        public Tables(string owner, string tableName, string[] additionalTablePropertyNames) : base(additionalTablePropertyNames)
+        public Tables(string owner, string tableName, string[] additionalTablePropertyNames, int? commandTimeout) : base(additionalTablePropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

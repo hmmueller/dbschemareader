@@ -8,11 +8,13 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _tableName;
         private readonly string[] _additionalColumnProperties;
+        private readonly int? _commandTimeout;
 
-        public Columns(string tableName, string[] additionalColumnProperties)
+        public Columns(string tableName, string[] additionalColumnProperties, int? commandTimeout)
         {
             _tableName = tableName;
             _additionalColumnProperties = additionalColumnProperties;
+            _commandTimeout = commandTimeout;
             // TODO: use _additionalColumnProperties 
             PragmaSql = @"PRAGMA table_info('{0}')";
         }
@@ -22,7 +24,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
 
         public IList<DatabaseColumn> Execute(DbConnection connection)
         {
-            var tables = new Tables(_tableName, new string[0]).Execute(connection);
+            var tables = new Tables(_tableName, new string[0], _commandTimeout).Execute(connection);
 
             foreach (var table in tables)
             {

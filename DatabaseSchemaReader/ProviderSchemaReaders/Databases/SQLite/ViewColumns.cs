@@ -8,11 +8,13 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _viewName;
         private readonly string[] _additionalColumnProperties;
+        private readonly int? _commandTimeout;
 
-        public ViewColumns(string viewName, string[] additionalColumnProperties)
+        public ViewColumns(string viewName, string[] additionalColumnProperties, int? commandTimeout)
         {
             _viewName = viewName;
             _additionalColumnProperties = additionalColumnProperties;
+            _commandTimeout = commandTimeout;
             PragmaSql = @"PRAGMA table_info('{0}')";
         }
 
@@ -21,7 +23,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
 
         public IList<DatabaseColumn> Execute(DbConnection connection)
         {
-            var views = new Views(_viewName, _additionalColumnProperties).Execute(connection);
+            var views = new Views(_viewName, _additionalColumnProperties, _commandTimeout).Execute(connection);
 
             foreach (var view in views)
             {

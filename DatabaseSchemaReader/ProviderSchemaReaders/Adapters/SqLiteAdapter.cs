@@ -16,45 +16,45 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 
         public override IList<DatabaseTable> Tables(string tableName)
         {
-            return new Tables(tableName, AdditionalTableProperties)
+            return new Tables(tableName, AdditionalTableProperties, CommandTimeout)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> Columns(string tableName)
         {
-            return new Columns(tableName, AdditionalColumnProperties)
+            return new Columns(tableName, AdditionalColumnProperties, CommandTimeout)
                 .Execute(DbConnection);
         }
 
 
         public override IList<DatabaseIndex> Indexes(string tableName)
         {
-            return new Indexes(tableName, AdditionalIndexProperties)
+            return new Indexes(tableName, AdditionalIndexProperties, CommandTimeout)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseConstraint> ForeignKeys(string tableName)
         {
-            return new Constraints(tableName, AdditionalForeignKeyProperties)
+            return new Constraints(tableName, AdditionalForeignKeyProperties, CommandTimeout)
                 .Execute(DbConnection);
         }
 
         public override IList<DatabaseTrigger> Triggers(string tableName)
         {
-            return new Triggers(tableName, AdditionalTriggerProperties)
+            return new Triggers(tableName, AdditionalTriggerProperties, CommandTimeout)
                 .Execute(DbConnection);
         }
 
 
         public override IList<DatabaseView> Views(string viewName)
         {
-            return new Views(viewName, AdditionalViewProperties)
+            return new Views(viewName, AdditionalViewProperties, CommandTimeout)
                .Execute(DbConnection);
         }
 
         public override IList<DatabaseColumn> ViewColumns(string viewName)
         {
-            return new ViewColumns(viewName, AdditionalColumnProperties)
+            return new ViewColumns(viewName, AdditionalColumnProperties, CommandTimeout)
                 .Execute(DbConnection);
         }
     }

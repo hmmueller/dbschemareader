@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
 {
     internal class Functions : OracleSqlExecuter<DatabaseFunction>
     {
-        public Functions(string owner, string[] additionalFunctionPropertyNames) : base(additionalFunctionPropertyNames)
+        public Functions(string owner, string[] additionalFunctionPropertyNames, int? commandTimeout) : base(additionalFunctionPropertyNames, commandTimeout)
         {
             Owner = owner;
             Sql = @"SELECT OWNER,

@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private SerializableAdditionalProperties _result;
 
-        public TopLevelProperties(string[] additionalTopLevelPropertyNames) : base(additionalTopLevelPropertyNames)
+        public TopLevelProperties(string[] additionalTopLevelPropertyNames, int? commandTimeout) : base(additionalTopLevelPropertyNames, commandTimeout)
         {
             Sql = @"SELECT 0 AS Dummy {0} FROM sys.databases ADDITIONAL_INFO WHERE name = db_name()";
         }

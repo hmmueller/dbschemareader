@@ -9,11 +9,13 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _tableName;
         private readonly string[] _additionalForeignKeyProperties;
+        private readonly int? _commandTimeout;
 
-        public Constraints(string tableName, string[] additionalForeignKeyProperties)
+        public Constraints(string tableName, string[] additionalForeignKeyProperties, int? commandTimeout)
         {
             _tableName = tableName;
             _additionalForeignKeyProperties = additionalForeignKeyProperties;
+            _commandTimeout = commandTimeout;
             // TODO: use _additionalForeignKeyProperties 
             PragmaSql = @"PRAGMA foreign_key_list('{0}')";
         }
@@ -23,7 +25,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
 
         public IList<DatabaseConstraint> Execute(DbConnection connection)
         {
-            var tables = new Tables(_tableName, new string[0]).Execute(connection);
+            var tables = new Tables(_tableName, new string[0], _commandTimeout).Execute(connection);
 
             foreach (var table in tables)
             {

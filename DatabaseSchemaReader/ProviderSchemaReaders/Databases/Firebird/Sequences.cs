@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
     class Sequences : SqlExecuter<DatabaseSequence>
     {
 
-        public Sequences(string[] additionalPropertyNames) : base(additionalPropertyNames) 
+        public Sequences(string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) 
         {
             //"Generators" in Firebird
             Sql = @"

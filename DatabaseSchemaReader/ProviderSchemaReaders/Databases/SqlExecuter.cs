@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
 
     internal abstract class SqlExecuter<T> : SqlExecuter where T : new()
     {
-        protected SqlExecuter(string[] additionalPropertyNames) : base(additionalPropertyNames) {
+        protected SqlExecuter(string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) {
         }
 
         protected List<T> Result { get; } = new List<T>();
@@ -20,10 +20,11 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
     {
         public const string ADDITIONAL_INFO = "ADDITIONAL_INFO";
         protected readonly string[] _additionalPropertyNames;
+        protected readonly int? _commandTimeout;
 
-        protected SqlExecuter(string[] additionalPropertyNames)
-        {
+        protected SqlExecuter(string[] additionalPropertyNames, int? commandTimeout) {
             _additionalPropertyNames = additionalPropertyNames;
+            _commandTimeout = commandTimeout;
         }
 
         public string Sql { get; set; }
@@ -46,6 +47,10 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases
             using (var cmd = connection.CreateCommand())
             {
                 cmd.CommandText = sql;
+                if (_commandTimeout.HasValue) 
+                {
+                    cmd.CommandTimeout = _commandTimeout.Value;
+                }
                 AddParameters(cmd);
                 using (var dr = cmd.ExecuteReader())
                 {

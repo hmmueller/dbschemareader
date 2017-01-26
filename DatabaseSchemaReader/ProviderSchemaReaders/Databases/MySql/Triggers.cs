@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     class Triggers : SqlExecuter<DatabaseTrigger>
     {
         private readonly string _tableName;
-        public Triggers(string owner, string tableName, string[] additionalTriggerPropertyNames) : base(additionalTriggerPropertyNames)
+        public Triggers(string owner, string tableName, string[] additionalTriggerPropertyNames, int? commandTimeout) : base(additionalTriggerPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

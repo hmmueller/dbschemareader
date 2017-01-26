@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _name;
 
-        public Functions(string owner, string name, string[] additionalFunctionPropertyNames) : base(additionalFunctionPropertyNames)
+        public Functions(string owner, string name, string[] additionalFunctionPropertyNames, int? commandTimeout) : base(additionalFunctionPropertyNames, commandTimeout)
         {
             _name = name;
             Owner = owner;

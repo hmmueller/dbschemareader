@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _viewName;
 
-        public ViewColumns(string owner, string viewName, string[] additionalViewColumnPropertyNames) : base(additionalViewColumnPropertyNames)
+        public ViewColumns(string owner, string viewName, string[] additionalViewColumnPropertyNames, int? commandTimeout) : base(additionalViewColumnPropertyNames, commandTimeout)
         {
             _viewName = viewName;
             Owner = owner;

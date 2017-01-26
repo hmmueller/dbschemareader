@@ -57,6 +57,7 @@ namespace DatabaseSchemaReaderTest
 
             var northwindReader = new DatabaseReader(connectionString, providername, additionalParameters);
             northwindReader.Owner = "dbo";
+            northwindReader.CommandTimeout = 15;
             return northwindReader;
         }
     }

@@ -16,10 +16,62 @@ namespace DatabaseSchemaReader.SqlGen.SqlServer
         {
             get { return "ALTER TABLE {0} ALTER COLUMN {1};"; }
         }
+
         protected override bool AlterColumnIncludeDefaultValue { get { return false; } }
+
+        public override string AddColumn(DatabaseTable databaseTable, DatabaseColumn databaseColumn) 
+        {
+            var tableGenerator = CreateTableGenerator(databaseTable);
+            var addColumn = tableGenerator.WriteColumn(databaseColumn).Trim();
+            var dropConstraint = "";
+            if (string.IsNullOrEmpty(databaseColumn.DefaultValue) && !databaseColumn.Nullable) 
+            {
+                DataType dt = databaseColumn.DataType;
+                string defaultValue = null;
+                if (dt == null || dt.IsString) 
+                {
+                    defaultValue = "''"; //empty string
+                } else if (dt.IsNumeric || dt.IsBool) 
+                {
+                    defaultValue = "0";
+                }
+                else if (dt.IsBinary) 
+                {
+                    defaultValue = "0x0";
+                }
+                else if (dt.IsDateTime) 
+                {
+                    defaultValue = "CURRENT_TIMESTAMP";
+                }
+                else if (dt.IsTimeSpan) 
+                {
+                    defaultValue = "'00:00'";
+                }
+                else if (dt.IsGuid)
+                {
+                    defaultValue = "'00000000-0000-0000-0000-000000000000'";
+                }
+            if (defaultValue != null) 
+                {
+                    addColumn += " CONSTRAINT _temp_default_constraint DEFAULT " + defaultValue;
+                    //make sure the NOT NULL is AFTER the default
+                    addColumn = addColumn.Replace(" NOT NULL ", " ") + " NOT NULL";
+
+                    // Make sure we do not add a constraint that is not supposed to be there.
+                    // If there is an actual default constraint present, it has to be added by the constraint section.
+                    dropConstraint = "; ALTER TABLE {0} DROP CONSTRAINT _temp_default_constraint";
+                }
+            }
+            return string.Format(CultureInfo.InvariantCulture,
+                "ALTER TABLE {0} ADD {1}" + dropConstraint,
+                TableName(databaseTable),
+                addColumn) + LineEnding();
+        }
 
         public override string AlterColumn(DatabaseTable databaseTable, DatabaseColumn databaseColumn, DatabaseColumn originalColumn)
         {
+            // TODO: HMM - interferes with constraint diffs/scripts generated elsewhere --> remove here?? necessary to drop even if value does not change, but ALTER TABLE does something else? 
+            // TODO: If necessary - we need "phase concept" for contraints ...
             var sb = new StringBuilder();
             var defaultName = "DF_" + databaseTable.Name + "_" + databaseColumn.Name;
             if (originalColumn != null)
@@ -50,24 +102,24 @@ namespace DatabaseSchemaReader.SqlGen.SqlServer
             return sb.ToString();
         }
 
-        public override string DropColumn(DatabaseTable databaseTable, DatabaseColumn databaseColumn)
-        {
-            var dropColumn = base.DropColumn(databaseTable, databaseColumn);
-            //if has a default constraint, drop that first.
-            if (databaseColumn.DefaultValue != null)
-            {
-                var df = FindDefaultConstraint(databaseTable, databaseColumn.Name);
-                if (df != null)
-                {
-                    var sb = new StringBuilder();
-                    sb.AppendLine("ALTER TABLE " + TableName(databaseTable)
-                                  + " DROP CONSTRAINT " + Escape(df.Name) + ";");
-                    sb.AppendLine(dropColumn);
-                    dropColumn = sb.ToString();
-                }
-            }
-            return dropColumn;
-        }
+        //public override string DropColumn(DatabaseTable databaseTable, DatabaseColumn databaseColumn)
+        //{
+        //    var dropColumn = base.DropColumn(databaseTable, databaseColumn);
+        //    //if has a default constraint, drop that first.
+        //    if (databaseColumn.DefaultValue != null)
+        //    {
+        //        var df = FindDefaultConstraint(databaseTable, databaseColumn.Name);
+        //        if (df != null)
+        //        {
+        //            var sb = new StringBuilder();
+        //            sb.AppendLine("ALTER TABLE " + TableName(databaseTable)
+        //                          + " DROP CONSTRAINT " + Escape(df.Name) + ";");
+        //            sb.AppendLine(dropColumn);
+        //            dropColumn = sb.ToString();
+        //        }
+        //    }
+        //    return dropColumn;
+        //}
 
         private static DatabaseConstraint FindDefaultConstraint(DatabaseTable databaseTable, string databaseColumnName)
         {

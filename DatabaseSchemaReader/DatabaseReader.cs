@@ -20,6 +20,7 @@ namespace DatabaseSchemaReader
     {
         private readonly SchemaParameters _schemaParameters;
         private readonly ReaderAdapter _readerAdapter;
+        public int? CommandTimeout { get; set; }
 
         //private readonly SchemaExtendedReader _schemaReader;
         private readonly DatabaseSchema _db;

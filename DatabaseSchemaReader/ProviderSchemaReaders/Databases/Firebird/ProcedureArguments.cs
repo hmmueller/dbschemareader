@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
 {
     internal class ProcedureArguments : SqlExecuter<DatabaseArgument>
     {
-        public ProcedureArguments(string owner, string[] additionalPropertyNames) : base(additionalPropertyNames) 
+        public ProcedureArguments(string owner, string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) 
         {
             Owner = owner;
             Sql = @"SELECT

@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
 {
     internal class StoredProcedures : SqlExecuter<DatabaseStoredProcedure>
     {
-        public StoredProcedures(string owner, string[] additionalPropertyNames) : base(additionalPropertyNames) 
+        public StoredProcedures(string owner, string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) 
         {
             Owner = owner;
             Sql = @"SELECT
