@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace DatabaseSchemaReader.DataSchema {
+    /// <summary>
+    /// Holder for additional properties of all schema objects to store database-specific flat information.
+    /// </summary>
     [Serializable]
     public class SerializableAdditionalProperties {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -19,14 +22,28 @@ namespace DatabaseSchemaReader.DataSchema {
             _additionalPropertyValues = new List<object>();
         }
 
-        public void Add(string name, object value) {
-            // TODO: Remove existing name and value? - because some objects are "doubly filled", e.g. constraints (FindConstraint, then fill).
-
-            _additionalPropertyNames.Add(name);
-            _additionalPropertyValues.Add(value);
+        /// <summary>
+        /// Add or replace the value of a top level property. The internal cache is cleared in this operation.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void AddOrReplace(string name, object value) {
+            int ix = _additionalPropertyNames.FindIndex(s => s == name);
+            if (ix >= 0) {
+                _additionalPropertyValues[ix] = value;
+            } else {
+                _additionalPropertyNames.Add(name);
+                _additionalPropertyValues.Add(value);
+            }
             _cache = null;
         }
 
+        /// <summary>
+        /// Get value of a property. This sets up an internal cache for all properties unless the cache
+        /// is already present.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public object Get(string name) {
             if (_cache == null) {
                 _cache = _additionalPropertyNames
@@ -40,8 +57,14 @@ namespace DatabaseSchemaReader.DataSchema {
             return value;
         }
 
+        /// <summary>
+        /// All the recorded property names
+        /// </summary>
         public List<string> AllNames => _additionalPropertyNames;
 
+        /// <summary>
+        /// All the recorded property values, in the same order as <see cref="AllNames"/>.
+        /// </summary>
         public List<object> AllValues => _additionalPropertyValues;
     }
 }

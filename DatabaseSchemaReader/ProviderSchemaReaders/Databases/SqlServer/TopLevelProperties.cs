@@ -25,7 +25,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
                 foreach (var p in _additionalPropertyNames)
                 {
                     int ix = row.GetOrdinal(p);
-                    _result.Add(p, row.IsDBNull(ix) ? null : row.GetValue(ix));
+                    _result.AddOrReplace(p, row.IsDBNull(ix) ? null : row.GetValue(ix));
                 }
             }
         }

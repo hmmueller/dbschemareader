@@ -105,10 +105,12 @@ namespace DatabaseSchemaReaderTest.SqlGen.Migrations.UnitTests
             var sql = migration.DropColumn(table, column);
 
             //assert
+            // No longer true for SQL server - DROP CONSTRAINT is done by constraint deltas
             //ALTER TABLE [dbo].[Orders] DROP CONSTRAINT [DF_Orders_Name];
             //ALTER TABLE [dbo].[Orders] DROP COLUMN [NAME];
 
-            Assert.IsTrue(sql.Contains("DROP CONSTRAINT [DF_Orders_Name]"), "drop constraint");
+            //Assert.IsTrue(sql.Contains("DROP CONSTRAINT [DF_Orders_Name]"), "drop constraint");
+            Assert.IsTrue(sql.Contains("DROP COLUMN [NAME]"), "drop column");
         }
 
         [TestMethod]

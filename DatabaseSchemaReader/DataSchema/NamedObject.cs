@@ -100,7 +100,7 @@ namespace DatabaseSchemaReader.DataSchema
             foreach (var s in additionalPropertyNames ?? Enumerable.Empty<string>())
             {
                 int ix = record.GetOrdinal(s);
-                AdditionalProperties.Add(s, record.IsDBNull(ix) ? null : record.GetValue(ix));
+                AdditionalProperties.AddOrReplace(s, record.IsDBNull(ix) ? null : record.GetValue(ix));
             }
         }
 
