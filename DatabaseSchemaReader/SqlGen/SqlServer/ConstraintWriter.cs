@@ -30,23 +30,28 @@ namespace DatabaseSchemaReader.SqlGen.SqlServer
             var columnList = GetColumnList(constraint.Columns);
 
             var pkName = ConstraintName(constraint);
-            var nonClustered = "";
-            if (constraint.Columns.Count == 1)
+
+            object nonClustered = Table.Indexes.FirstOrDefault(i => i.IndexType == "PRIMARY")?.AdditionalProperties.Get("type_desc");            
+            if (nonClustered == null) 
             {
-                //UNIQUEIDENTIFIERs should have NON CLUSTERED indexes
-                var colName = constraint.Columns[0];
-                var col = Table.FindColumn(colName);
-                if (col != null)
+                // Old, botched logic for decided about NONCLUSTERED.
+                if (constraint.Columns.Count == 1)
                 {
-                    colName = col.NetName;
-                    if (string.Equals(col.DbDataType, "UNIQUEIDENTIFIER", StringComparison.OrdinalIgnoreCase))
+                    //UNIQUEIDENTIFIERs should have NON CLUSTERED indexes
+                    var colName = constraint.Columns[0];
+                    var col = Table.FindColumn(colName);
+                    if (col != null)
+                    {
+                        colName = col.NetName;
+                        if (string.Equals(col.DbDataType, "UNIQUEIDENTIFIER", StringComparison.OrdinalIgnoreCase))
+                        {
+                            nonClustered = "NONCLUSTERED ";
+                        }
+                    }
+                    if ("guid".Equals(colName, StringComparison.OrdinalIgnoreCase))
                     {
                         nonClustered = "NONCLUSTERED ";
                     }
-                }
-                if ("guid".Equals(colName, StringComparison.OrdinalIgnoreCase))
-                {
-                    nonClustered = "NONCLUSTERED ";
                 }
             }
 
