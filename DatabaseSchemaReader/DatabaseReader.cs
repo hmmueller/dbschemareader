@@ -20,6 +20,10 @@ namespace DatabaseSchemaReader
     {
         private readonly SchemaParameters _schemaParameters;
         private readonly ReaderAdapter _readerAdapter;
+
+        /// <summary>
+        /// Timeout in seconds for commands emitted by DatabaseReader
+        /// </summary>
         public int? CommandTimeout { get; set; }
 
         //private readonly SchemaExtendedReader _schemaReader;
@@ -52,6 +56,7 @@ namespace DatabaseSchemaReader
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
+        /// <param name="additionalParameters">Names of database-specific propertoes to be read</param>
         public DatabaseReader(string connectionString, string providerName, IAdditionalProperties additionalParameters = null)
             : this(new DatabaseSchema(connectionString, providerName), additionalParameters)
         {
@@ -82,6 +87,7 @@ namespace DatabaseSchemaReader
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
         /// <param name="owner">The schema owner.</param>
+        /// <param name="additionalParameters">Names of database-specific propertoes to be read</param>
         public DatabaseReader(string connectionString, string providerName, string owner, IAdditionalProperties additionalParameters = null)
             : this(new DatabaseSchema(connectionString, providerName) { Owner = owner }, additionalParameters)
         {
