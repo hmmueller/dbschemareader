@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -88,13 +87,25 @@ namespace DatabaseSchemaReader.DataSchema
             return Name.GetHashCode();
         }
 
+        /// <summary>
+        /// Additional database-specific properties of this object
+        /// </summary>
         public SerializableAdditionalProperties AdditionalProperties { get; set; }
 
+        /// <summary>
+        /// constructor for derived classes
+        /// </summary>
         protected NamedObject()
         {
             AdditionalProperties = new SerializableAdditionalProperties();
         }
 
+        /// <summary>
+        /// Add additional properties from database result
+        /// </summary>
+        /// <param name="record">Database record read</param>
+        /// <param name="additionalPropertyNames">Properties to be extracted</param>
+        /// <exception cref="Exception">If column with property name is not present in record</exception>
         public void AddAdditionalProperties(IDataRecord record, string[] additionalPropertyNames)
         {
             foreach (var s in additionalPropertyNames ?? Enumerable.Empty<string>())

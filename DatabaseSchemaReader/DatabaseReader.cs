@@ -214,7 +214,7 @@ namespace DatabaseSchemaReader
         private void AdditionalTopLevelProperties()
         {
             SerializableAdditionalProperties topLevelProperties = _readerAdapter.TopLevelProperties();
-            DatabaseSchema.ReplaceTopLevelProperties(topLevelProperties);
+            DatabaseSchema.TopLevelProperties= topLevelProperties;
         }
 
         private void AllSequences()
