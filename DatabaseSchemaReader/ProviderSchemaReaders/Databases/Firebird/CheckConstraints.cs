@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
     {
         private readonly string _tableName;
 
-        public CheckConstraints(string owner, string tableName, string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout) {
+        public CheckConstraints(string owner, string tableName, string[] additionalPropertyNames, int commandTimeout) : base(additionalPropertyNames, commandTimeout) {
             _tableName = tableName;
             Owner = owner;
             Sql = @"SELECT 

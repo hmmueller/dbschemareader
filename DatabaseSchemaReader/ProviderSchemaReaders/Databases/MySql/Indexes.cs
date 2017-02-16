@@ -11,7 +11,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _tableName;
 
-        public Indexes(string owner, string tableName, string[] additionalIndexPropertyNames, int? commandTimeout) : base(additionalIndexPropertyNames, commandTimeout)
+        public Indexes(string owner, string tableName, string[] additionalIndexPropertyNames, int commandTimeout) : base(additionalIndexPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

@@ -12,8 +12,8 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
     {
         private readonly SchemaExtendedReader _schemaReader;
 
-        public DbProviderReaderAdapter(SchemaParameters schemaParameters)
-            : base(schemaParameters)
+        public DbProviderReaderAdapter(SchemaParameters schemaParameters, int commandTimeout)
+            : base(schemaParameters, commandTimeout)
         {
             _schemaReader = SchemaReaderFactory.Create(schemaParameters.ConnectionString, schemaParameters.ProviderName);
             _schemaReader.Owner = schemaParameters.Owner;

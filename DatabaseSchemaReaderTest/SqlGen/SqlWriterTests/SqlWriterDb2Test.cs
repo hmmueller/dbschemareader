@@ -42,7 +42,7 @@ namespace DatabaseSchemaReaderTest.SqlGen.SqlWriterTests
 
             ProviderChecker.Check(ProviderName, ConnectionString);
 
-            var dbReader = new DatabaseReader(ConnectionString, ProviderName);
+            var dbReader = new DatabaseReader(ConnectionString, ProviderName, 0);
             dbReader.DataTypes(); //ensure we have datatypes (this doesn't hit the database)
             _table = dbReader.Table("STAFF"); //this hits database for columns and constraints
             return _table;
@@ -94,7 +94,7 @@ namespace DatabaseSchemaReaderTest.SqlGen.SqlWriterTests
         {
             //arrange
             ProviderChecker.Check(ProviderName, ConnectionString);
-            var dbReader = new DatabaseReader(ConnectionString, ProviderName);
+            var dbReader = new DatabaseReader(ConnectionString, ProviderName, 0);
             dbReader.DataTypes(); //ensure we have datatypes (this doesn't hit the database)
             var table = dbReader.Table("TABWITHIDENTITY"); //this hits database for columns and constraints
 

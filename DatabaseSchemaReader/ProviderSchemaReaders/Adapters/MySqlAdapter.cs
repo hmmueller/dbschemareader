@@ -6,7 +6,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 {
     class MySqlAdapter : ReaderAdapter
     {
-        public MySqlAdapter(SchemaParameters schemaParameters) : base(schemaParameters)
+        public MySqlAdapter(SchemaParameters schemaParameters, int commandTimeout) : base(schemaParameters, commandTimeout)
         {
         }
 		

@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _tableName;
 
-        public ComputedColumns(string owner, string tableName, string[] additionalComputedColumnPropertyNames, int? commandTimeout) : base(additionalComputedColumnPropertyNames, commandTimeout)
+        public ComputedColumns(string owner, string tableName, string[] additionalComputedColumnPropertyNames, int commandTimeout) : base(additionalComputedColumnPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

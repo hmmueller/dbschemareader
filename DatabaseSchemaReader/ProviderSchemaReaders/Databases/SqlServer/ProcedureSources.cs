@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _name;
 
-        public ProcedureSources(string owner, string name, string[] additionalProcedureSourcePropertyNames, int? commandTimeout) : base(additionalProcedureSourcePropertyNames, commandTimeout)
+        public ProcedureSources(string owner, string name, string[] additionalProcedureSourcePropertyNames, int commandTimeout) : base(additionalProcedureSourcePropertyNames, commandTimeout)
         {
             _name = name;
             Owner = owner;

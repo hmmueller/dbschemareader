@@ -202,7 +202,7 @@ namespace DatabaseSchemaViewer
             var providerName = DataProviders.SelectedValue.ToString();
 
             StartWaiting();
-            var rdr = new DatabaseReader(connectionString, providerName);
+            var rdr = new DatabaseReader(connectionString, providerName, 0);
             var owner = SchemaOwner.Text.Trim();
             if (!string.IsNullOrEmpty(owner))
                 rdr.Owner = owner;

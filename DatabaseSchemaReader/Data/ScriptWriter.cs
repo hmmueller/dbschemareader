@@ -75,9 +75,9 @@ namespace DatabaseSchemaReader.Data
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
         /// <returns></returns>
-        public string ReadTable(string tableName, string connectionString, string providerName)
+        public string ReadTable(string tableName, string connectionString, string providerName, int commandTimeout)
         {
-            using (var dr = new DatabaseReader(connectionString, providerName))
+            using (var dr = new DatabaseReader(connectionString, providerName, commandTimeout))
             {
                 var databaseTable = dr.Table(tableName);
                 if (databaseTable == null) return null;

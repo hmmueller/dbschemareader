@@ -20,7 +20,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = @"Server=localhost;AuthenticationMethod=NTLM;DatabaseName=AdventureWorks";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var product = schema.FindTableByName("Product");
             Assert.AreEqual(25, product.Columns.Count);
@@ -36,7 +36,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = "Host=localhost;Service Name=XE;User Id=HR;Password=HR;";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             dbReader.Owner = "HR";
             var schema = dbReader.ReadAll();
             var employees = schema.FindTableByName("EMPLOYEES");

@@ -116,7 +116,7 @@ namespace DatabaseSchemaViewer
                 return;
             }
             var providerName = _databaseSchema.Provider;
-            var rdr = new DatabaseReader(connectionString, providerName);
+            var rdr = new DatabaseReader(connectionString, providerName, 0);
             var owner = _databaseSchema.Owner;
             if (!string.IsNullOrEmpty(owner))
                 rdr.Owner = owner;

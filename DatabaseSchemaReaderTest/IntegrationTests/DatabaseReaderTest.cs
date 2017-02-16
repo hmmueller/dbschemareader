@@ -24,7 +24,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = "Provider=msdaora;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=XE)));User Id=hr;Password=hr;";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             //exclude a lot of system sprocs that get picked up. This speeds us up massively.
             dbReader.Exclusions.StoredProcedureFilter = new PrefixFilter("APEX", "ANY", "AGGR", "AQ$", "BLAST",
                 "CTX", "DBMS", "DM_", "DBU", "DEVELOP", "DICT", "DIV", "DIU", "DRI", "DRV", "HTF",
@@ -49,7 +49,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = ConnectionStrings.OracleHr;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             dbReader.Owner = "HR";
             var schema = dbReader.ReadAll();
             var employees = schema.FindTableByName("EMPLOYEES");
@@ -66,7 +66,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = @"Data Source=.\SQLEXPRESS;Integrated Security=true;Initial Catalog=AdventureWorks";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var product = schema.FindTableByName("Product");
             Assert.IsTrue(product.Columns.Count >= 17); //different versions of AdventureWorks have different # columns

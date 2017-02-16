@@ -31,7 +31,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             var connectionString = ConnectionStrings.PostgreSql;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             dbReader.Owner = "public"; //otherwise you have "postgres" owned tables and views
             var schema = dbReader.ReadAll();
             var country = schema.FindTableByName("country");
@@ -46,7 +46,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             var connectionString = ConnectionStrings.PostgreSql;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             dbReader.Owner = "public"; //otherwise you have "postgres" owned tables and views
             var schema = dbReader.ReadAll();
 

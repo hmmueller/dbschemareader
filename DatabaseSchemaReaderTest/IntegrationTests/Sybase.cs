@@ -22,7 +22,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             DiscoverProviderFactory.Discover(connectionString, providername);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
 
             Assert.IsTrue(schema.Tables.Count > 0);
@@ -38,7 +38,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             DiscoverProviderFactory.Discover(connectionString, providername);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
 
             Assert.IsTrue(schema.Tables.Count > 0);
@@ -54,7 +54,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
 
             Assert.IsTrue(schema.Tables.Count > 0);

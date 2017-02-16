@@ -25,7 +25,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             string connectionString = @"Data Source=" + dir;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var orders = schema.FindTableByName("Orders");
             Assert.IsTrue(orders.Columns.Count > 2); //we don't care if it's not standard Northwind

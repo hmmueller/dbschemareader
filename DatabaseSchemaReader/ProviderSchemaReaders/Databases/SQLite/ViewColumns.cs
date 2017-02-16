@@ -8,9 +8,9 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _viewName;
         private readonly string[] _additionalColumnProperties;
-        private readonly int? _commandTimeout;
+        private readonly int _commandTimeout;
 
-        public ViewColumns(string viewName, string[] additionalColumnProperties, int? commandTimeout)
+        public ViewColumns(string viewName, string[] additionalColumnProperties, int commandTimeout)
         {
             _viewName = viewName;
             _additionalColumnProperties = additionalColumnProperties;

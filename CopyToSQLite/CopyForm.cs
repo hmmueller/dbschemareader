@@ -230,7 +230,7 @@ namespace CopyToSQLite
             var connectionString = ConnectionString.Text.Trim();
             _providerName = DataProviders.SelectedValue.ToString();
             _filePath = txtFilePath.Text.Trim();
-            var rdr = new DatabaseReader(connectionString, _providerName);
+            var rdr = new DatabaseReader(connectionString, _providerName, 0);
             var owner = SchemaOwner.Text.Trim();
             if (!string.IsNullOrEmpty(owner))
                 rdr.Owner = owner;

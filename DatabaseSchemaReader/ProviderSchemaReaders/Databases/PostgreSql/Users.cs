@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
 {
     internal class Users : SqlExecuter<DatabaseUser>
     {
-        public Users(string[] additionalUserPropertyNames, int? commandTimeout) : base(additionalUserPropertyNames, commandTimeout)
+        public Users(string[] additionalUserPropertyNames, int commandTimeout) : base(additionalUserPropertyNames, commandTimeout)
         {
             Sql = @"SELECT usename as user_name FROM pg_catalog.pg_user";
         }

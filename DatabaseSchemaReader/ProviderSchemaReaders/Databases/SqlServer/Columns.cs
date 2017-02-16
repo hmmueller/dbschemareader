@@ -12,7 +12,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _tableName;
         private readonly ColumnRowConverter _converter;
 
-        public Columns(string owner, string tableName, string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout)
+        public Columns(string owner, string tableName, string[] additionalPropertyNames, int commandTimeout) : base(additionalPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

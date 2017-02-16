@@ -21,7 +21,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             //DatabaseSchemaReader.Utilities.DiscoverProviderFactory.Discover(connectionString, providername);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
 
             Assert.IsTrue(schema.Tables.Count > 0);

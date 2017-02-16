@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _name;
 
-        public ViewSources(string owner, string name, string[] additionalViewSourcePropertyNames, int? commandTimeout) : base(additionalViewSourcePropertyNames, commandTimeout)
+        public ViewSources(string owner, string name, string[] additionalViewSourcePropertyNames, int commandTimeout) : base(additionalViewSourcePropertyNames, commandTimeout)
         {
             _name = name;
             Owner = owner;

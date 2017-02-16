@@ -138,7 +138,7 @@ namespace DatabaseSchemaReaderTest.Codegen
             var connectionString = ConnectionStrings.MySql;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
 
             var procedure = schema.StoredProcedures
@@ -208,7 +208,7 @@ namespace DatabaseSchemaReaderTest.Codegen
             const string connectionString = @"Data Source=.\SQLEXPRESS;Integrated Security=true;Initial Catalog=AdventureWorks";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             DatabaseSchema schema = null;
             try
             {
@@ -244,7 +244,7 @@ namespace DatabaseSchemaReaderTest.Codegen
             const string connectionString = ConnectionStrings.OracleHr;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             dbReader.Owner = "HR";
             DatabaseSchema schema = null;
             try

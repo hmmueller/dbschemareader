@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _name;
 
-        public StoredProcedures(string owner, string name, string[] additionalStoredProcedurePropertyNames, int? commandTimeout) : base(additionalStoredProcedurePropertyNames, commandTimeout)
+        public StoredProcedures(string owner, string name, string[] additionalStoredProcedurePropertyNames, int commandTimeout) : base(additionalStoredProcedurePropertyNames, commandTimeout)
         {
             _name = name;
             Owner = owner;

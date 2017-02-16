@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _tableName;
 
-        public Tables(string tableName, string[] additionalTablePropertyNames, int? commandTimeout) : base(additionalTablePropertyNames, commandTimeout)
+        public Tables(string tableName, string[] additionalTablePropertyNames, int commandTimeout) : base(additionalTablePropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Sql = @"SELECT name FROM sqlite_master

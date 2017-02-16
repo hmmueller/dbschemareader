@@ -5,27 +5,27 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 {
     static class ReaderAdapterFactory
     {
-        public static ReaderAdapter Create(SchemaParameters schemaParameters)
+        public static ReaderAdapter Create(SchemaParameters schemaParameters, int commandTimeout)
         {
             ReaderAdapter schemaReader = null;
             switch (schemaParameters.SqlType)
             {
                 case SqlType.SqlServer:
-                    return new SqlServerAdapter(schemaParameters);
+                    return new SqlServerAdapter(schemaParameters, commandTimeout);
                 case SqlType.Oracle:
-                    schemaReader = new OracleAdapter(schemaParameters);
+                    schemaReader = new OracleAdapter(schemaParameters, commandTimeout);
                     break;
                 case SqlType.SQLite:
-                    schemaReader = new SqLiteAdapter(schemaParameters);
+                    schemaReader = new SqLiteAdapter(schemaParameters, commandTimeout);
                     break;               
                 case SqlType.PostgreSql:
-                    schemaReader = new PostgreSqlAdapter(schemaParameters);
+                    schemaReader = new PostgreSqlAdapter(schemaParameters, commandTimeout);
                     break;
                 case SqlType.MySql:
-                    schemaReader = new MySqlAdapter(schemaParameters);
+                    schemaReader = new MySqlAdapter(schemaParameters, commandTimeout);
                     break;
                 case SqlType.SqlServerCe:
-                    schemaReader = new SqlServerCeAdapter(schemaParameters);
+                    schemaReader = new SqlServerCeAdapter(schemaParameters, commandTimeout);
                     break;
 
                 default:
@@ -61,7 +61,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
                     //}
                     if (string.Equals(schemaParameters.ProviderName, "FirebirdSql.Data.FirebirdClient", StringComparison.OrdinalIgnoreCase))
                     {
-                        schemaReader = new FirebirdAdapter(schemaParameters);
+                        schemaReader = new FirebirdAdapter(schemaParameters, commandTimeout);
                     }
 
                     break;
@@ -69,7 +69,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
             if (schemaReader == null)
             {
 #if !COREFX
-                schemaReader = new DbProviderReaderAdapter(schemaParameters);
+                schemaReader = new DbProviderReaderAdapter(schemaParameters, commandTimeout);
 #else
                 schemaReader = new ReaderAdapter(schemaParameters);
 #endif

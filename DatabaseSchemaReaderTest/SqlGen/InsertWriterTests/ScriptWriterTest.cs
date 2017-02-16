@@ -38,7 +38,7 @@ namespace DatabaseSchemaReaderTest.SqlGen.InsertWriterTests
             var rdr = new ScriptWriter();
 
             //act
-            var txt = rdr.ReadTable("Categories", _connectionString, Providername);
+            var txt = rdr.ReadTable("Categories", _connectionString, Providername, 0);
 
             //assert
             Assert.IsTrue(txt.Contains("INSERT INTO [Categories]"), "Insert statments created: [" + txt + "]");

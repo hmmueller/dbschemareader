@@ -25,7 +25,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             DiscoverProviderFactory.Discover(connectionString, providername);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var table = schema.FindTableByName("Products");
 
@@ -47,7 +47,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
 
             DiscoverProviderFactory.Discover(connectionString, providername);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var table = schema.FindTableByName("Products");
 

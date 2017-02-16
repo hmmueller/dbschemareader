@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     {
         private readonly string _viewName;
 
-        public Views(string owner, string viewName, string[] additionalViewPropertyNames, int? commandTimeout) : base(additionalViewPropertyNames, commandTimeout)
+        public Views(string owner, string viewName, string[] additionalViewPropertyNames, int commandTimeout) : base(additionalViewPropertyNames, commandTimeout)
         {
             _viewName = viewName;
             Owner = owner;

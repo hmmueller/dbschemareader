@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
         //http://firebirdsql.org/file/documentation/reference_manuals/fblangref25-en/html/fblangref25-appx04-systables.html
 
 
-        public FirebirdAdapter(SchemaParameters schemaParameters) : base(schemaParameters)
+        public FirebirdAdapter(SchemaParameters schemaParameters, int commandTimeout) : base(schemaParameters, commandTimeout)
         {
         }
 

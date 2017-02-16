@@ -76,7 +76,7 @@ namespace DatabaseSchemaReaderTest.Utilities
 
             ProviderChecker.Check(providername, ConnectionStrings.Northwind);
 
-            var dr = new DatabaseReader(ConnectionStrings.Northwind, "Xxxxx");
+            var dr = new DatabaseReader(ConnectionStrings.Northwind, "Xxxxx", 0);
             var tables = dr.TableList();
 
             Assert.IsTrue(tables.Count > 0, "We called the reader with a bogus provider type, but we got the overridden type");

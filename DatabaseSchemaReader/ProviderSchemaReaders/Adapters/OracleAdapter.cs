@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 {
     class OracleAdapter : ReaderAdapter
     {
-        public OracleAdapter(SchemaParameters schemaParameters) : base(schemaParameters)
+        public OracleAdapter(SchemaParameters schemaParameters, int commandTimeout) : base(schemaParameters, commandTimeout)
         {
         }
 

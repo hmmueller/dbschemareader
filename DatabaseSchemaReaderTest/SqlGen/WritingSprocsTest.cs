@@ -20,7 +20,7 @@ namespace DatabaseSchemaReaderTest.SqlGen
             var connectionString = ConnectionStrings.Northwind;
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             return schema.FindTableByName("Categories");
         }

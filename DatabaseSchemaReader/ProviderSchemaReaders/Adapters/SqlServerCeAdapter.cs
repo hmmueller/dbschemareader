@@ -6,7 +6,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 {
     class SqlServerCeAdapter : ReaderAdapter
     {
-        public SqlServerCeAdapter(SchemaParameters schemaParameters) : base(schemaParameters)
+        public SqlServerCeAdapter(SchemaParameters schemaParameters, int commandTimeout) : base(schemaParameters, commandTimeout)
         {
         }
         public override IList<DataType> DataTypes()

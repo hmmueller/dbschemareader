@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.PostgreSql
         private readonly string _tableName;
         private readonly ConstraintType _constraintType;
 
-        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalPrimaryKeyPropertyNames, int? commandTimeout) : base(additionalPrimaryKeyPropertyNames, commandTimeout)
+        public Constraints(string owner, string tableName, ConstraintType constraintType, string[] additionalPrimaryKeyPropertyNames, int commandTimeout) : base(additionalPrimaryKeyPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             _constraintType = constraintType;

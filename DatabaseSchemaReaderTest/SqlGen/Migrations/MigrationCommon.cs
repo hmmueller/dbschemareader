@@ -16,7 +16,7 @@ namespace DatabaseSchemaReaderTest.SqlGen.Migrations
         {
             ProviderChecker.Check(providerName, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providerName);
+            var dbReader = new DatabaseReader(connectionString, providerName, 0);
             var tables = dbReader.TableList();
             //find an unused table name. 
             const string tableName = "TESTDSR";

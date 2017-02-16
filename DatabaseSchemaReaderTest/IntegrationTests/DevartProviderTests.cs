@@ -19,7 +19,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = "Server=localhost;Sid=XE;Port=1521;Direct=true;User Id=hr;Password=hr;";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             dbReader.Owner = "HR";
             var schema = dbReader.ReadAll();
             var employees = schema.FindTableByName("EMPLOYEES");
@@ -37,7 +37,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = @"Data Source=localhost\SQLEXPRESS;Integrated Security=true;Initial Catalog=AdventureWorks";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var product = schema.FindTableByName("Product");
             Assert.AreEqual(25, product.Columns.Count);

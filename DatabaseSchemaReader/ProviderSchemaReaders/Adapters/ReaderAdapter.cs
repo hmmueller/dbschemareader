@@ -10,11 +10,12 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
     {
         public readonly SchemaParameters Parameters;
         private ConnectionAdapter _connectionAdapter;
-        public int? CommandTimeout { get; set; }
+        public int CommandTimeout { get; }
 
-        public ReaderAdapter(SchemaParameters schemaParameters)
+        public ReaderAdapter(SchemaParameters schemaParameters, int commandTimeout)
         {
             Parameters = schemaParameters;
+            CommandTimeout = commandTimeout;
         }
 
         /// <summary>

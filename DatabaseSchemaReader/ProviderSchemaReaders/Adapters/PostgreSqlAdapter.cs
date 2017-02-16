@@ -8,7 +8,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
 {
     class PostgreSqlAdapter : ReaderAdapter
     {
-        public PostgreSqlAdapter(SchemaParameters schemaParameters) : base(schemaParameters)
+        public PostgreSqlAdapter(SchemaParameters schemaParameters, int commandTimeout) : base(schemaParameters, commandTimeout)
         {
         }
 

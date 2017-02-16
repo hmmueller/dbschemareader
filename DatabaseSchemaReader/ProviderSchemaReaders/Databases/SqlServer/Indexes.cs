@@ -12,7 +12,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _tableName;
         private readonly string[] _additionalIndexColumnProperties;
 
-        public Indexes(string owner, string tableName, string[] additionalIndexPropertyNames, string[] additionalIndexColumnProperties, int? commandTimeout) 
+        public Indexes(string owner, string tableName, string[] additionalIndexPropertyNames, string[] additionalIndexColumnProperties, int commandTimeout) 
             : base(
                   additionalIndexPropertyNames == null ? additionalIndexColumnProperties
                       : additionalIndexColumnProperties == null ? additionalIndexPropertyNames

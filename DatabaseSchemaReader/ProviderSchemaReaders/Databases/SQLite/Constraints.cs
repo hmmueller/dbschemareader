@@ -9,9 +9,9 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SQLite
     {
         private readonly string _tableName;
         private readonly string[] _additionalForeignKeyProperties;
-        private readonly int? _commandTimeout;
+        private readonly int _commandTimeout;
 
-        public Constraints(string tableName, string[] additionalForeignKeyProperties, int? commandTimeout)
+        public Constraints(string tableName, string[] additionalForeignKeyProperties, int commandTimeout)
         {
             _tableName = tableName;
             _additionalForeignKeyProperties = additionalForeignKeyProperties;

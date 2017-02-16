@@ -17,7 +17,7 @@ namespace DatabaseSchemaReaderTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void NoConnectionStringTest()
         {
-            new DatabaseReader(null, SqlType.SqlServer);
+            new DatabaseReader(null, SqlType.SqlServer, commandTimeout: 5);
 
             Assert.Fail("Should not have succeeded");
         }
@@ -26,7 +26,7 @@ namespace DatabaseSchemaReaderTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void NoProviderTest()
         {
-            new DatabaseReader("Dummy", null);
+            new DatabaseReader("Dummy", null, 0);
 
             Assert.Fail("Should not have succeeded");
         }
@@ -34,7 +34,7 @@ namespace DatabaseSchemaReaderTest
         [TestMethod]
         public void SqlTypeTest()
         {
-            var dr =  new DatabaseReader("Dummy", SqlType.SqlServer);
+            var dr =  new DatabaseReader("Dummy", SqlType.SqlServer, commandTimeout: 5);
             Assert.AreEqual("System.Data.SqlClient", dr.DatabaseSchema.Provider);
 
             //the other types will fail if they aren't installed

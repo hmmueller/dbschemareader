@@ -12,7 +12,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
         private readonly string _viewName;
         private readonly ColumnRowConverter _converter;
 
-        public ViewColumns(string owner, string viewName, string[] additionalViewColumnPropertyNames, int? commandTimeout) : base(additionalViewColumnPropertyNames, commandTimeout)
+        public ViewColumns(string owner, string viewName, string[] additionalViewColumnPropertyNames, int commandTimeout) : base(additionalViewColumnPropertyNames, commandTimeout)
         {
             _viewName = viewName;
             Owner = owner;

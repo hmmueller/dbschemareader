@@ -21,11 +21,6 @@ namespace DatabaseSchemaReader
         private readonly SchemaParameters _schemaParameters;
         private readonly ReaderAdapter _readerAdapter;
 
-        /// <summary>
-        /// Timeout in seconds for commands emitted by DatabaseReader
-        /// </summary>
-        public int? CommandTimeout { get; set; }
-
         //private readonly SchemaExtendedReader _schemaReader;
         private readonly DatabaseSchema _db;
 
@@ -56,9 +51,10 @@ namespace DatabaseSchemaReader
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
+        /// <param name="commandTimeout"></param>
         /// <param name="additionalParameters">Names of database-specific propertoes to be read</param>
-        public DatabaseReader(string connectionString, string providerName, IAdditionalProperties additionalParameters = null)
-            : this(new DatabaseSchema(connectionString, providerName), additionalParameters)
+        public DatabaseReader(string connectionString, string providerName, int commandTimeout, IAdditionalProperties additionalParameters = null)
+            : this(new DatabaseSchema(connectionString, providerName), commandTimeout, additionalParameters)
         {
         }
 
@@ -68,12 +64,12 @@ namespace DatabaseSchemaReader
         /// <param name="connectionString">The connection string.</param>
         /// <param name="sqlType">Type of the SQL.</param>
         /// <param name="additionalParameters"></param>
-        public DatabaseReader(string connectionString, SqlType sqlType, IAdditionalProperties additionalParameters = null)
+        public DatabaseReader(string connectionString, SqlType sqlType, int commandTimeout, IAdditionalProperties additionalParameters = null)
         {
             if (connectionString == null)
                 throw new ArgumentNullException("connectionString");
             _schemaParameters = new SchemaParameters(connectionString, sqlType);
-            _readerAdapter = ReaderAdapterFactory.Create(_schemaParameters);
+            _readerAdapter = ReaderAdapterFactory.Create(_schemaParameters, commandTimeout);
             _readerAdapter.AdditionalParameters = additionalParameters;
 
             //_schemaReader = SchemaReaderFactory.Create(connectionString, sqlType);
@@ -87,9 +83,10 @@ namespace DatabaseSchemaReader
         /// <param name="connectionString">The connection string.</param>
         /// <param name="providerName">Name of the provider.</param>
         /// <param name="owner">The schema owner.</param>
+        /// <param name="commandTimeout"></param>
         /// <param name="additionalParameters">Names of database-specific propertoes to be read</param>
-        public DatabaseReader(string connectionString, string providerName, string owner, IAdditionalProperties additionalParameters = null)
-            : this(new DatabaseSchema(connectionString, providerName) { Owner = owner }, additionalParameters)
+        public DatabaseReader(string connectionString, string providerName, string owner, int commandTimeout, IAdditionalProperties additionalParameters = null)
+            : this(new DatabaseSchema(connectionString, providerName) { Owner = owner }, commandTimeout, additionalParameters)
         {
         }
 
@@ -97,8 +94,9 @@ namespace DatabaseSchemaReader
         /// Initializes a new instance of the <see cref="DatabaseReader"/> class using an existing <see cref="DatabaseSchema"/>.
         /// </summary>
         /// <param name="databaseSchema">The database schema. Can be a subclassed version.</param>
+        /// <param name="commandTimeout"></param>
         /// <param name="additionalParameters"></param>
-        public DatabaseReader(DatabaseSchema databaseSchema, IAdditionalProperties additionalParameters = null)
+        public DatabaseReader(DatabaseSchema databaseSchema, int commandTimeout, IAdditionalProperties additionalParameters = null)
         {
             if (databaseSchema == null)
                 throw new ArgumentNullException("databaseSchema");
@@ -108,7 +106,7 @@ namespace DatabaseSchemaReader
             _schemaParameters = new SchemaParameters(databaseSchema.ConnectionString, databaseSchema.Provider);
             _schemaParameters.DatabaseSchema = databaseSchema;
             _schemaParameters.Owner = databaseSchema.Owner;
-            _readerAdapter = ReaderAdapterFactory.Create(_schemaParameters);
+            _readerAdapter = ReaderAdapterFactory.Create(_schemaParameters, commandTimeout);
             _readerAdapter.AdditionalParameters = additionalParameters;
             _db = databaseSchema;
         }

@@ -36,7 +36,7 @@ namespace DatabaseSchemaReaderTest.SqlGen.SqlWriterTests
 
             ProviderChecker.Check(ProviderName, _connectionString);
 
-            var dbReader = new DatabaseReader(_connectionString, ProviderName);
+            var dbReader = new DatabaseReader(_connectionString, ProviderName, 0);
             dbReader.Owner = "public"; //otherwise you have "postgres" owned tables and views
             dbReader.DataTypes(); //ensure we have datatypes (this doesn't hit the database)
             _table = dbReader.Table("country"); //this hits database for columns and constraints

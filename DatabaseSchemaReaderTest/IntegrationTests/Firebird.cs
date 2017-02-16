@@ -39,7 +39,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
         [TestInitialize]
         public void Setup()
         {
-            _dbReader = new DatabaseReader(ConnectionString, ProviderName);
+            _dbReader = new DatabaseReader(ConnectionString, ProviderName, 0);
         }
 
         [TestMethod, TestCategory("Firebird")]

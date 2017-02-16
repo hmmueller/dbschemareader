@@ -18,7 +18,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests {
             const string connectionString = @"Driver={SQL Server};Server=.\SQLEXPRESS;Database=Northwind;Trusted_Connection=Yes;";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername) { Owner = "dbo" };
+            var dbReader = new DatabaseReader(connectionString, providername, 0) { Owner = "dbo" };
             //this is slow because it pulls in sp_ stored procedures and system views.
             dbReader.Exclusions.StoredProcedureFilter = new PrefixFilter("sp_", "fn_", "dm_", "xp_");
             var schema = dbReader.ReadAll();

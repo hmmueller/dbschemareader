@@ -9,7 +9,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.MySql
     {
         private readonly string _tableName;
 
-        public IdentityColumns(string owner, string tableName, string[] additionalIdentityColumnPropertyNames, int? commandTimeout) : base(additionalIdentityColumnPropertyNames, commandTimeout)
+        public IdentityColumns(string owner, string tableName, string[] additionalIdentityColumnPropertyNames, int commandTimeout) : base(additionalIdentityColumnPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

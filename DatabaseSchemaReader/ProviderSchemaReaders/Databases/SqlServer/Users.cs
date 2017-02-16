@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
 {
     class Users : SqlExecuter<DatabaseUser>
     {
-        public Users(string[] additionalUserPropertyNames, int? commandTimeout) : base(additionalUserPropertyNames, commandTimeout)
+        public Users(string[] additionalUserPropertyNames, int commandTimeout) : base(additionalUserPropertyNames, commandTimeout)
         {
             Sql = @"select name {0} from sysusers {ai}".Replace("{ai}", ADDITIONAL_INFO);
         }

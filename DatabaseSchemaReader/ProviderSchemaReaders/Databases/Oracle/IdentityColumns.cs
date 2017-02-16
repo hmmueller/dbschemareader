@@ -10,7 +10,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Oracle
     {
         private readonly string _tableName;
 
-        public IdentityColumns(string owner, string tableName, string[] additionalIdentityColumnPropertyNames, int? commandTimeout) : base(additionalIdentityColumnPropertyNames, commandTimeout)
+        public IdentityColumns(string owner, string tableName, string[] additionalIdentityColumnPropertyNames, int commandTimeout) : base(additionalIdentityColumnPropertyNames, commandTimeout)
         {
             _tableName = tableName;
             Owner = owner;

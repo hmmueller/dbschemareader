@@ -18,7 +18,7 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             const string connectionString = @"Server=localhost:50000;UID=db2admin;pwd=db2;Database=Sample";
             ProviderChecker.Check(providername, connectionString);
 
-            var dbReader = new DatabaseReader(connectionString, providername);
+            var dbReader = new DatabaseReader(connectionString, providername, 0);
             var schema = dbReader.ReadAll();
             var table = schema.FindTableByName("EMPLOYEE");
             Assert.IsTrue(table.Columns.Count > 0);

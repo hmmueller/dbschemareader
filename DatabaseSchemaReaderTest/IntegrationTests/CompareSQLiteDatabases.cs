@@ -23,9 +23,9 @@ namespace DatabaseSchemaReaderTest.IntegrationTests
             CreateDatabases();
 
             //act
-            var dsr1 = new DatabaseReader("Data Source=" + Db1Sqlite + ";Version=3;", SqlType.SQLite);
+            var dsr1 = new DatabaseReader("Data Source=" + Db1Sqlite + ";Version=3;", SqlType.SQLite, commandTimeout: 5);
             var schema1 = dsr1.ReadAll();
-            var dsr2 = new DatabaseReader("Data Source=" + Db2Sqlite + ";Version=3;", SqlType.SQLite);
+            var dsr2 = new DatabaseReader("Data Source=" + Db2Sqlite + ";Version=3;", SqlType.SQLite, commandTimeout: 5);
             var schema2 = dsr2.ReadAll();
             var comparison = new CompareSchemas(schema1, schema2);
             var result = comparison.Execute();

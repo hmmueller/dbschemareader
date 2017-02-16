@@ -7,7 +7,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.Firebird
 {
     class Users : SqlExecuter<DatabaseUser>
     {
-        public Users(string[] additionalPropertyNames, int? commandTimeout) : base(additionalPropertyNames, commandTimeout)        
+        public Users(string[] additionalPropertyNames, int commandTimeout) : base(additionalPropertyNames, commandTimeout)        
         {
             Sql = @"SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES";
         }

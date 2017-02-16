@@ -12,7 +12,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
         private bool? _isAzureSqlDatabase;
         private const int SqlServerEngineAzure = 5;
 
-        public SqlServerAdapter(SchemaParameters schemaParameters) : base(schemaParameters)
+        public SqlServerAdapter(SchemaParameters schemaParameters, int commandTimeout) : base(schemaParameters, commandTimeout)
         {
         }
 
