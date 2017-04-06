@@ -27,7 +27,7 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
   OBJECT_DEFINITION({ai}.object_id) AS TRIGGER_BODY
   {0}
 FROM sys.triggers AS {ai}
-INNER JOIN sys.tables AS parent
+INNER JOIN sys.objects AS parent
   ON {ai}.parent_id = parent.object_id
   {1}
 WHERE (SCHEMA_NAME(parent.schema_id) = @Owner or (@Owner is null)) 

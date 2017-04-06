@@ -16,11 +16,12 @@ namespace DatabaseSchemaReaderTest
         {
             get
             {
-                if (string.Equals("True", Environment.GetEnvironmentVariable("APPVEYOR")))
-                {
-                    return @"Server=(local)\SQL2008R2SP2;Database=NorthwindDsr;User ID=sa;Password=Password12!";
-                }
-                return @"Data Source=.\SQLEXPRESS;Integrated Security=true;Initial Catalog=Northwind";
+                return @"Data Source=.\PTSQL;Integrated Security=true;Initial Catalog=NorthwindDsr";
+                //if (string.Equals("True", Environment.GetEnvironmentVariable("APPVEYOR")))
+                //{
+                //    return @"Server=(local)\SQL2008R2SP2;Database=NorthwindDsr;User ID=sa;Password=Password12!";
+                //}
+                //return @"Data Source=.\SQLEXPRESS;Integrated Security=true;Initial Catalog=Northwind";
             }
         }
 

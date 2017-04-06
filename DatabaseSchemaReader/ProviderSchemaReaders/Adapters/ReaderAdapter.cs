@@ -179,6 +179,11 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Adapters
             return new List<DatabaseIndex>();
         }
 
+        public virtual IList<DatabaseIndex> ViewIndexes(string tableName)
+        { 
+             return new List<DatabaseIndex>(); 
+         }
+
         public virtual IList<DatabaseTrigger> Triggers(string tableName)
         {
             return new List<DatabaseTrigger>();

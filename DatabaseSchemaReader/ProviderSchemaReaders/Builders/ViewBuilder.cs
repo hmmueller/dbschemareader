@@ -66,6 +66,11 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
             if (ct.IsCancellationRequested) return views;
             RaiseReadingProgress(SchemaObjectType.ViewColumns);
 
+            if (ct.IsCancellationRequested)
+                return views;
+            var indexes = _readerAdapter.ViewIndexes(null);
+
+
             var viewColumns = _readerAdapter.ViewColumns(null);
             var count = views.Count;
             for (var index = 0; index < count; index++)
@@ -83,8 +88,24 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Builders
                     cols = viewColumns.Where(x => x.TableName == v.Name && x.SchemaOwner == v.SchemaOwner);
                 }
                 v.Columns.AddRange(cols);
+                v.Indexes = indexes.Where(x => x.TableName == v.Name && x.SchemaOwner == v.SchemaOwner).ToList();
             }
+
+            var triggers = _readerAdapter.Triggers(null);
+
+            foreach (var view in views) {
+                UpdateTriggers(view, triggers);
+            }
+
             return views;
         }
+
+        private void UpdateTriggers(DatabaseView view, IList<DatabaseTrigger> triggers) {
+            var viewTriggers = triggers.Where(x => x.SchemaOwner == view.SchemaOwner &&
+                                                x.TableName == view.Name);
+            view.Triggers.Clear();
+            view.Triggers.AddRange(viewTriggers);
+        }
+
     }
 }
