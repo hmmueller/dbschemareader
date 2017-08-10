@@ -375,9 +375,9 @@ namespace DatabaseSchemaReader.SqlGen
                 indexType, //must have trailing space
                 Escape(index.Name),
                 TableName(databaseTable),
-                GetColumnList(index.Columns.Where(c => !c.IsIncludeColumnInIndex).Select(i => i.Name))) + 
+                GetColumnList(index.Columns.Where(c => !c.IsIncludeColumnInIndex).OrderBy(column => column.Ordinal).Select(i => i.Name))) + 
                 // Uses SQL SERVER syntax for include columns; if this is not general enough, move this to SqlServerMigrationGenerator and generalize here.
-                (includeColumns.Any() ? " INCLUDE (" + GetColumnList(includeColumns.Select(i => i.Name)) + ")" : "") 
+                (includeColumns.Any() ? " INCLUDE (" + GetColumnList(includeColumns.OrderBy(column => column.Ordinal).Select(i => i.Name)) + ")" : "") 
                 + LineEnding();
         }
 
