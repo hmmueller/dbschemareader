@@ -305,9 +305,10 @@ namespace DatabaseSchemaReader.SqlGen
 
         public virtual string DropStatistics(DatabaseTable databaseTable, DatabaseStatistics statistics) {
             return string.Format(CultureInfo.InvariantCulture,
-                "DROP STATISTICS {0} ON {1};",
-                Escape(statistics.Name),
-                TableName(databaseTable));
+                "DROP STATISTICS {0}{1}.{2};",
+                SchemaPrefix(databaseTable.SchemaOwner),
+                TableName(databaseTable),
+                Escape(statistics.Name));
         }
 
         public virtual string AddTrigger(DatabaseTable databaseTable, DatabaseTrigger trigger)
