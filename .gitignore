@@ -224,3 +224,4 @@ CodeGenTester/packages/
 DatabaseSchemaReader.sln.GhostDoc.xml
 !DatabaseSchemaReaderTest/northwind.sdf
 /.vs/DatabaseSchemaReader/v15/sqlite3/storage.ide
+/.vs/DatabaseSchemaReader/v15/Server/sqlite3

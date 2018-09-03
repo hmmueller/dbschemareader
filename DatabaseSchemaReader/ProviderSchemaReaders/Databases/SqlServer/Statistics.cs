@@ -19,7 +19,8 @@ namespace DatabaseSchemaReader.ProviderSchemaReaders.Databases.SqlServer
     SchemaName = SCHEMA_NAME(t.schema_id),
     TableName = t.name,
     StatisticsName = {ai}.name,
-    ColumnName = col.name
+    ColumnName = col.name,
+    Ordinal = stc.stats_column_id
     {0}
 FROM
     sys.stats {ai}
@@ -67,10 +68,12 @@ ORDER BY
             var colName = record.GetString("ColumnName");
             if (string.IsNullOrEmpty(colName))
                 return;
+            var ordinal = record.GetInt("Ordinal");
 
             var col = new DatabaseColumn
             {
                 Name = colName,
+                Ordinal = ordinal
             };
             statistics.Columns.Add(col);
 
